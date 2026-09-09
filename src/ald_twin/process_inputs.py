@@ -1,4 +1,4 @@
-"""Explicit inputs for synthetic, one-to-one, two-half-cycle examples."""
+"""explicit inputs for synthetic, one-to-one, two-half-cycle examples."""
 
 from copy import deepcopy
 import json
@@ -34,12 +34,15 @@ def load_process(name_or_path):
 
 
 def input_issues(data):
-    """Return missing/unsupported inputs for the CLI and GUI to display."""
+    """return missing/unsupported inputs for the cli and gui to display."""
+
     issues = []
     if not isinstance(data, dict):
         return ["The process input must be a JSON object"]
     try:
-        # Metadata is saved with the inputs, so it must also be finite JSON.
+
+        # saved metadata must contain finite, serializable values.
+
         json.dumps(data, allow_nan=False)
     except (TypeError, ValueError, OverflowError) as error:
         return [f"Inputs must contain finite JSON values: {error}"]
@@ -98,7 +101,9 @@ def input_issues(data):
             issues.append("fraction_scale exceeds the declared synthetic trace scale 0.01")
         chemistry = data["chemistry"]
         CycleChemistry(**chemistry)
-        # Both events must operate for the recurring-cycle recipe diagnostics.
+
+        # cycle diagnostics need both reaction events.
+
         _positive(chemistry["rate_a"], "chemistry.rate_a")
         _positive(chemistry["rate_b"], "chemistry.rate_b")
         interval = data["reactive_interval"]
@@ -137,7 +142,8 @@ def input_issues(data):
 
 
 def prepare_inputs(data):
-    """Validate before constructing flow, chemistry or a recipe for calculation."""
+    """validate before constructing flow, chemistry or a recipe for calculation."""
+
     data = deepcopy(data)
     issues = input_issues(data)
     if issues:
@@ -154,7 +160,8 @@ def prepare_inputs(data):
 
 
 def inspect_process(data):
-    """Describe required inputs without invoking the integrator."""
+    """describe required inputs without invoking the integrator."""
+
     issues = input_issues(data)
     report = dict(inputs=data, issues=issues, runnable=not issues, physical_fit_ready=False)
     if issues:

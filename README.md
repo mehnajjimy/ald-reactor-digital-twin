@@ -4,6 +4,10 @@ How much precursor reaches the end of an ALD reactor? How long does it take to
 clear after a pulse? This project follows the gas and surface through each cycle
 and compares a simple well-mixed model with one that resolves the channel.
 
+**[Download for Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip)** · **[Install guide](docs/install.md)**
+
+Desktop tested only on Apple Silicon macOS. This build is not Apple-notarized.
+
 **245 Python tests · [CI verified](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D + spatial transport · Mac desktop + CLI**
 
 **The examples are synthetic. DEZ is still a placeholder, and the model has not
@@ -31,7 +35,7 @@ passed its numerical checks, but no recipe worked across every scenario.
 Nine earlier high-Peclet cases and one capacity-profile point remain unverified.
 Getting the math right and finding a working recipe are separate questions.
 
-## Run it
+## Run from source
 
 Use Python 3.12. On macOS or Linux:
 

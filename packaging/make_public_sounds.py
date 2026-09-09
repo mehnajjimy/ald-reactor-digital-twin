@@ -1,4 +1,4 @@
-"""Generate original quiet tones for a clean source export, using no recordings."""
+"""generate original quiet tones for a clean source export, using no recordings."""
 
 import argparse
 import json
@@ -17,7 +17,9 @@ def make_sounds(output):
         samples = bytearray()
         count = round(sample_rate * duration)
         for index in range(count):
-            # A smooth envelope starts and ends at zero, preventing sharp clicks.
+
+            # fade both ends to zero to avoid sharp clicks.
+
             envelope = math.sin(math.pi * index / (count - 1)) ** 2
             value = .15 * envelope * math.sin(2 * math.pi * frequency * index / sample_rate)
             samples.extend(struct.pack("<h", round(32767 * value)))

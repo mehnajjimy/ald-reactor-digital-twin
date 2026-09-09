@@ -2,7 +2,7 @@
 
 The native Mac wrapper opens the same [reactor workspace](gui-guide.md) without
 a terminal. A built app contains Python, the solver, process examples, interface
-and sounds. Apple Silicon macOS 14+ is the locally tested platform. Windows and
+and sounds. The build targets Apple Silicon macOS 14+; testing used macOS 26.6.2. Windows and
 Intel Mac bundles have not been verified.
 
 ## Use
@@ -49,14 +49,12 @@ the ordinary browser/CLI installation remains smaller.
 For development, run `work/desktop-build/bin/ald-reactor --runs "$PWD/runs"`.
 Use `--settings /absolute/path` to isolate preferences during checks.
 
-The local bundle uses an ad-hoc signature. Public Mac distribution requires
-its own Developer ID signing and notarization. No built app is included in this
-source folder.
+The local bundle uses an ad-hoc signature. The downloadable release is not Developer ID signed or notarized. See the
+[install guide](install.md) for the Mac download and first-launch instructions.
 
-## Version 0.1.2
+## Version 1.0.0
 
-The repeated sidebar and footer labels are removed; numerical, recipe and physical
-status remain separate in the results. The logo and sound toggle are unchanged.
-The desktop menu **Help → Check for Updates…** shows the installed version.
-The update check now uses `mehnajjimy/ald-reactor-digital-twin`. Until a stable
-release is published, it reports that no public release was found. See the [release guide](release-guide.md).
+The public release includes a Mac app ZIP and an [install guide](install.md).
+Testing used Apple Silicon macOS 26.6.2. The app is ad-hoc signed and not notarized.
+The logo and sound toggle are unchanged; the public build uses original tones.
+Use **Help → Check for Updates…** for a manual release check.

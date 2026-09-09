@@ -1,4 +1,4 @@
-"""Native window and file dialogs around the existing local workspace."""
+"""native window and file dialogs around the existing local workspace."""
 
 import argparse
 import json
@@ -47,7 +47,7 @@ class Preferences:
 
 
 class DesktopFiles:
-    """Native file and preference operations behind the local API's token check."""
+    """native file and preference operations behind the local api's token check."""
 
     def __init__(self, preferences):
         self._preferences = preferences
@@ -71,7 +71,9 @@ class DesktopFiles:
         if not selection:
             return False
         path = Path(selection if isinstance(selection, str) else selection[0]).resolve()
-        # Partial attempts and their inputs must survive exports too.
+
+        # keep exports outside partial runs too.
+
         if any((parent/"manifest.json").exists() or (parent/"run.json").exists()
                for parent in path.parents):
             raise ValueError("Save a copy outside a saved run folder")
@@ -87,7 +89,8 @@ def show_folder(path):
 
 
 def show_updates(window, is_closed, lock):
-    """Run off the UI thread; repeated clicks share one check and dialog."""
+    """run off the ui thread; repeated clicks share one check and dialog."""
+
     if not lock.acquire(blocking=False):
         return
     try:
@@ -134,7 +137,9 @@ def launch(runs=None, settings=None):
                 return
             closed = True
             try:
-                # shutdown() blocks forever if startup never reached thread.start().
+
+                # only stop the server if its thread started; otherwise shutdown hangs.
+
                 if thread.is_alive():
                     server.shutdown()
                 server.workspace.close()
@@ -172,7 +177,9 @@ def launch(runs=None, settings=None):
             width=1180, height=820, min_size=(900, 650), text_select=True,
             background_color="#FFFFFF")
         bridge._window = window
-        # Cocoa's Quit menu can terminate without returning from its event loop.
+
+        # the native quit event must stop workers before the event loop exits.
+
         window.events.closing += close
         menus = [Menu("File", [MenuAction("Open runs folder…", open_runs),
             MenuAction("Show runs folder", lambda: show_folder(server.workspace.directory))]),
@@ -189,8 +196,10 @@ def launch(runs=None, settings=None):
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv[:1] == ["--worker"]:
-        # Windowed frozen apps replace Python's streams with None. The parent
-        # already redirected these descriptors to the retained worker log.
+
+        # windowed apps have no console streams; reuse the worker log descriptors
+        # already opened by the parent.
+
         for name, descriptor in (("stdout", 1), ("stderr", 2)):
             if getattr(sys, name) is None:
                 setattr(sys, name, os.fdopen(os.dup(descriptor), "w", buffering=1))

@@ -1,4 +1,4 @@
-"""Validate, run, verify and report one synthetic recipe with the shared engine."""
+"""validate, run, verify and report one synthetic recipe with the shared engine."""
 
 from dataclasses import asdict, replace
 from datetime import datetime, timezone
@@ -37,8 +37,10 @@ def numerical_changes(first, second, segments, residence, film):
     change = resolution_difference(first, second) | metric_difference(first, second, segments, residence)
     summaries = [output_metrics(result, segments, film) for result in (first, second)]
     growth_change = 0.
-    # Turnover is the normalized growth for fixed Gamma in a single trial.
-    # Comparing this avoids transferring the ZnO mass mapping to fictional A/B.
+
+    # compare turnover at fixed capacity, without applying the conditional
+    # zno mass mapping to fictional a/b.
+
     for name in ("mean_turnover", "relative_turnover_spread"):
         a, b = (summary[name] for summary in summaries)
         if (a is None) != (b is None):
@@ -50,11 +52,12 @@ def numerical_changes(first, second, segments, residence, film):
 
 
 def run_process(data, output, *, progress=None):
-    """Use a new folder; never resume or replace a historical study.
+    """use a new folder; never resume or replace a historical study.
 
-    Progress callbacks receive completed-attempt records. The atomic run.json
-    also exposes the current stage for a GUI without a second calculation path.
+    progress callbacks receive completed-attempt records. the atomic run.json
+    also exposes the current stage for a gui without a second calculation path.
     """
+
     parameters, chemistry, segments, residence = prepare_inputs(data)
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
@@ -174,7 +177,8 @@ def run_process(data, output, *, progress=None):
 
 
 def read_run(folder):
-    """Check a completed saved run against its manifest without calculating."""
+    """check a completed saved run against its manifest without calculating."""
+
     folder = Path(folder).resolve()
     manifest = json.loads((folder/"manifest.json").read_text())
     record = json.loads((folder/"run.json").read_text())
@@ -241,7 +245,8 @@ def compare_runs(folders):
 
 
 def report_rows(summary):
-    """Human-readable labels and units; saved JSON retains unrounded SI values."""
+    """human-readable labels and units; saved json retains unrounded si values."""
+
     clearance_a, clearance_b = summary["purge_crossing_s"]
     consumed_a, consumed_b = summary["precursor_consumption_fraction"]
     escaped_a, escaped_b = summary["precursor_escape_fraction"]

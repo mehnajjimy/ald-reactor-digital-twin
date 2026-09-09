@@ -4,9 +4,9 @@ type: software
 title: "Physics-based ALD reactor digital-twin framework"
 authors:
   - name: "mehnajjimy"
-version: 0.1.2
+version: 1.0.0
 license: MIT
 abstract: "Verified 0D and 1D ALD transport and cycle software with synthetic process studies. Experimental validation remains incomplete."
 repository-code: "https://github.com/mehnajjimy/ald-reactor-digital-twin"
-# Add date-released when an actual public release exists.
+date-released: "2026-09-09"
 # No DOI has been assigned.

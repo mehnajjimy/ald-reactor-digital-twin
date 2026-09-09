@@ -8,16 +8,16 @@ share an explanation; the source keeps its short functions and useful comments.
 | Lines | Meaning |
 |---|---|
 | 1–9 | Describe the manual lookup and import JSON, version matching, HTTP errors, URL encoding and HTTPS requests. Read the package's sole version constant. |
-| 11–12 | Set the public release destination to `mehnajjimy/ald-reactor-digital-twin`. No credentials or run data are sent. |
-| 15–19 | Require a stable three-part numeric tag, optionally prefixed with `v`. Convert its parts to integers so 0.10.0 sorts after 0.9.0. Reject prereleases and malformed tags. |
-| 22–29 | Select the configured or explicitly supplied repository and prepare installed-version text. Missing or malformed locations return a local message without networking. |
-| 30–31 | Construct the fixed GitHub API endpoint and public JSON/User-Agent headers. No credentials or run inputs are sent. |
-| 32–36 | Open the request with a five-second socket timeout. Read at most one byte over 1 MB so an oversized response is rejected. Close the response on leaving the context. |
-| 37–42 | Parse JSON, require a stable non-draft release object, and parse its tag and the installed version before comparison. |
-| 43–50 | Distinguish absent public releases, access/rate limits and other HTTP failures; none claims the app is current. |
-| 51–52 | Turn connection, timeout, decoding and malformed-response errors into a concise failure message. |
-| 53–56 | For a newer release, construct a GitHub release-page URL from the configured repository and validated tag. Ignore remote URL fields. Return a confirmation question and that destination. |
-| 57–58 | Distinguish equal versions from a local build ahead of the public release, with no download offer. |
+| 11–13 | Set the public release destination to `mehnajjimy/ald-reactor-digital-twin`. No credentials or run data are sent. |
+| 16–21 | Require a stable three-part numeric tag, optionally prefixed with `v`. Convert its parts to integers so 0.10.0 sorts after 0.9.0. Reject prereleases and malformed tags. |
+| 24–32 | Select the configured or explicitly supplied repository and prepare installed-version text. Missing or malformed locations return a local message without networking. |
+| 33–34 | Construct the fixed GitHub API endpoint and public JSON/User-Agent headers. No credentials or run inputs are sent. |
+| 35–39 | Open the request with a five-second socket timeout. Read at most one byte over 1 MB so an oversized response is rejected. Close the response on leaving the context. |
+| 40–45 | Parse JSON, require a stable non-draft release object, and parse its tag and the installed version before comparison. |
+| 46–53 | Distinguish absent public releases, access/rate limits and other HTTP failures; none claims the app is current. |
+| 54–55 | Turn connection, timeout, decoding and malformed-response errors into a concise failure message. |
+| 56–61 | For a newer release, construct a GitHub release-page URL from the configured repository and validated tag. Ignore remote URL fields. Return a confirmation question and that destination. |
+| 62–63 | Distinguish equal versions from a local build ahead of the public release, with no download offer. |
 
 `src/ald_twin/__init__.py` lines 1–3 state the verification scope and define
 `__version__`. Package metadata, desktop packaging and the updater read that value.

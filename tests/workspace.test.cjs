@@ -1,4 +1,5 @@
-/* Run with node --test tests/workspace.test.cjs; no browser packages needed. */
+/* run with node --test tests/workspace.test.cjs; no browser packages needed. */
+
 const assert = require('node:assert/strict');
 const {test} = require('node:test');
 const vm = require('node:vm');
@@ -26,7 +27,9 @@ function workspace(desktop=false) {
   });
   const source = fs.readFileSync(path.join(__dirname, '../src/ald_twin/ui/workspace.js'), 'utf8');
   vm.runInContext(source, context);
-  // Startup's catalog request stays pending; tests exercise the actual handlers.
+
+  // startup's catalog request stays pending; tests exercise the actual handlers.
+
   requests.shift();
   return {element, requests, run:code => vm.runInContext(code, context)};
 }

@@ -1,6 +1,6 @@
 # Installation and local verification
 
-For the standalone Mac app, see the [desktop guide](desktop-guide.md). The built
+For the standalone Mac app, see the [install guide](install.md). The built
 app includes Python and the solver; the setup below is for source development
 and command-line use.
 
@@ -66,7 +66,7 @@ attempts remain on disk; the single-run workflow does not resume them.
 .venv/bin/python -m pip wheel --no-deps --no-build-isolation . --wheel-dir dist
 python3.12 -m venv work/wheel-check
 work/wheel-check/bin/python -m pip install -r requirements-lock.txt
-work/wheel-check/bin/python -m pip install --no-deps dist/ald_reactor_digital_twin-0.1.0-py3-none-any.whl
+work/wheel-check/bin/python -m pip install --no-deps dist/ald_reactor_digital_twin-1.0.0-py3-none-any.whl
 ```
 
 Then, from an empty directory outside the checkout, call that environment's

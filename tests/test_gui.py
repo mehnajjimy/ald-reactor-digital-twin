@@ -1,4 +1,4 @@
-"""Verify the local GUI boundary, real worker results and retained failures."""
+"""verify the local gui boundary, real worker results and retained failures."""
 
 from http.client import HTTPConnection
 import json

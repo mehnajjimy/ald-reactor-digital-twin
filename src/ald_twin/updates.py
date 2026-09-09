@@ -1,4 +1,4 @@
-"""Manual public-release lookup; never download or install application files."""
+"""manual public-release lookup; never download or install application files."""
 
 import json
 import re
@@ -8,19 +8,22 @@ from urllib.request import Request, urlopen
 
 from . import __version__
 
-# Public release destination; the check never sends credentials or run data.
+# release checks send no credentials or run data.
+
 REPOSITORY = "mehnajjimy/ald-reactor-digital-twin"
 
 
 def version_parts(tag):
-    """Compare stable vMAJOR.MINOR.PATCH tags numerically, without prereleases."""
+    """compare stable vmajor.minor.patch tags numerically, without prereleases."""
+
     if not isinstance(tag, str) or not re.fullmatch(r"v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", tag):
         raise ValueError("Expected a stable release version")
     return tuple(int(part) for part in tag.removeprefix("v").split("."))
 
 
 def check_release(repository=None):
-    """Return a short status and an optional GitHub download-page URL."""
+    """return a short status and an optional github download-page url."""
+
     repository = REPOSITORY if repository is None else repository
     installed = f"Installed version: {__version__}."
     if not repository:
@@ -51,7 +54,9 @@ def check_release(repository=None):
     except (OSError, ValueError):
         return f"{installed}\nCould not check for updates. Check your connection or try again later.", None
     if latest > current:
-        # Construct the destination ourselves; never open a URL supplied in a response.
+
+        # build the link here; ignore remote download links.
+
         url = f"https://github.com/{repository}/releases/tag/{quote(tag, safe='')}"
         return f"{installed}\nLatest release: {tag}.\nOpen download page?", url
     message = "You have the latest release." if latest == current else "This build is newer than the latest public release."

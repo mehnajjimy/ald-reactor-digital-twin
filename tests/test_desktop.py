@@ -1,4 +1,5 @@
-"""Desktop packaging boundaries: dispatch, persistent choices, exports and quit."""
+"""desktop packaging boundaries: dispatch, persistent choices, exports and quit."""
+
 import json
 import sys
 from types import SimpleNamespace
@@ -125,7 +126,9 @@ def test_quitting_closes_the_server_and_retains_the_worker_record(tmp_path, monk
         workspace = servers[0].workspace
         workspace.start(load_process("synthetic-ab"))
         assert workspace.process.poll() is None
-        # The native Quit event must clean up even if the Cocoa loop never returns.
+
+        # the native quit event must clean up even if the cocoa loop never returns.
+
         for close in window.events.closing:
             close()
         assert workspace.process.poll() is not None

@@ -1,4 +1,4 @@
-"""Release checks never install files, trust remote URLs, or delay shutdown."""
+"""release checks never install files, trust remote urls, or delay shutdown."""
 
 from io import BytesIO
 import json
@@ -32,11 +32,11 @@ def test_newer_release_uses_numeric_version_and_fixed_github_destination(monkeyp
     calls = []
     def fetch(request, timeout):
         calls.append((request, timeout))
-        return response("v0.10.0", html_url="file:///untrusted")
+        return response("v1.10.0", html_url="file:///untrusted")
     monkeypatch.setattr(updates, "urlopen", fetch)
     message, url = updates.check_release()
-    assert "Latest release: v0.10.0" in message
-    assert url == "https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/tag/v0.10.0"
+    assert "Latest release: v1.10.0" in message
+    assert url == "https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/tag/v1.10.0"
     assert calls[0][0].full_url == "https://api.github.com/repos/mehnajjimy/ald-reactor-digital-twin/releases/latest"
     assert calls[0][1] == 5
     assert not calls[0][0].has_header("Authorization")

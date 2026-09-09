@@ -1,4 +1,4 @@
-"""Exercise scientific gates, unchanged results, CLI agreement and saved reads."""
+"""exercise scientific gates, unchanged results, cli agreement and saved reads."""
 
 import json
 import shutil
@@ -120,7 +120,9 @@ def test_cli_recipe_override_reports_missing_input_without_traceback(tmp_path, r
 
 
 def test_report_distinguishes_uncleared_zero_and_unavailable(small_run, tmp_path):
-    # Exercise the saved-report boundary without running another calculation.
+
+    # exercise the saved-report boundary without running another calculation.
+
     record = json.loads(json.dumps(small_run[2]))
     summary = record["models"]["spatial"]["metrics"]
     summary["purge_crossing_s"] = [None, 0.]

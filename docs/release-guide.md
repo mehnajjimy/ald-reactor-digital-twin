@@ -3,16 +3,15 @@
 The browser interface reads the installed HTML/CSS/JavaScript. Edit the source,
 restart its service when Python changes, and refresh the browser. The Mac app
 contains a frozen copy; it needs a new verified bundle before edits appear there.
-The existing ALD logo and one sound on/off control are unchanged in version 0.1.2.
+The existing ALD logo and one sound on/off control are unchanged in version 1.0.0.
 
 ## Update check
 
-Use **Help → Check for Updates…** in the desktop app. Version 0.1.2 checks
-`mehnajjimy/ald-reactor-digital-twin`. Until a stable release is published, it
-reports that no public release was found. A source push alone is not a release.
+Use **Help → Check for Updates…** in the desktop app. Version 1.0.0 checks
+`mehnajjimy/ald-reactor-digital-twin`. The stable release includes a Mac app download. A source push alone is not a release.
 
 The manual check reads GitHub's latest published stable release. Use tags such as
-`v0.1.2`; only three-part numeric versions are supported. Drafts and prereleases
+`v1.0.0`; only three-part numeric versions are supported. Drafts and prereleases
 are excluded. A newer version offers to open its GitHub download page in the
 browser. Downloads, installation and restarts remain manual.
 
@@ -40,12 +39,9 @@ from an up-to-date result.
 The MIT license covers original project code/documentation. Third-party notices
 remain in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) and `licenses/`.
 The [references](references.md) explain the scientific sources and their limits.
-The citation currently uses the owner's `mehnajjimy` handle. Replace it with the
-preferred author name if desired; the public repository is recorded, and a release date should be added when
-a release exists. No DOI or publication date is invented.
+The citation records the owner's `mehnajjimy` handle, repository and release date.
+No DOI has been assigned.
 
-The clean public source folder excludes internal checkpoints, supplied recordings,
-private archives and local results. Its generated sounds differ from the personal
-installed app's recordings. Build public binaries from that folder. Public Mac
-signing/notarization remains release work. Nothing in this guide authorizes a push, publication or scientific
-campaign. DEZ inputs remain synthetic placeholders.
+Build public binaries from the clean source export, which uses original generated
+tones. The public Mac app is ad-hoc signed and not notarized; see the
+[install guide](install.md). DEZ inputs remain synthetic placeholders.

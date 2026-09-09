@@ -1,4 +1,5 @@
-/* UI state and presentation only. All flow, validation and solves stay in Python. */
+/* ui state and presentation only. all flow, validation and solves stay in python. */
+
 const byId = id => document.getElementById(id);
 const token = document.querySelector('meta[name="workspace-token"]').content;
 const isDesktop = document.querySelector('meta[name="desktop"]').content === 'true';
@@ -273,7 +274,9 @@ async function compareSelected() {
   if (!first || !second) return;
   try {
     const result = await api('/api/compare', [first, second]);
-    // Ignore a response for an earlier selection.
+
+    // ignore a response for an earlier selection.
+
     if (first !== byId('compare-first').value || second !== byId('compare-second').value) return;
     const [a,b] = result.runs;
     fillRows('comparison', [

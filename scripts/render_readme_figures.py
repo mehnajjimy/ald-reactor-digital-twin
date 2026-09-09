@@ -1,4 +1,4 @@
-"""Render saved synthetic results for the README; never run a simulation."""
+"""render saved synthetic results for the readme; never run a simulation."""
 
 from pathlib import Path
 import hashlib

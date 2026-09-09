@@ -1,4 +1,5 @@
-"""Build on the target OS. The verified local artifact is macOS arm64."""
+"""build on the target os. the verified local artifact is macos arm64."""
+
 from pathlib import Path
 import runpy
 import sys
@@ -6,7 +7,9 @@ from PyInstaller.utils.hooks import collect_data_files
 
 root = Path(SPECPATH).parent
 version = runpy.run_path(root/"src/ald_twin/__init__.py")["__version__"]
-# Keep readable source snapshots in frozen runs, including every solver module.
+
+# bundle readable sources so each run can record its solver hashes.
+
 data = collect_data_files("ald_twin", include_py_files=True)
 data += [(str(root/name), ".") for name in ("LICENSE", "THIRD_PARTY_NOTICES.md")]
 data += [(str(root/"licenses"), "licenses")]

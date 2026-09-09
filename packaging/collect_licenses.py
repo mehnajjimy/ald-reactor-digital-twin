@@ -1,4 +1,4 @@
-"""Copy notices from the pinned Mac build environment into a new directory."""
+"""copy notices from the pinned mac build environment into a new directory."""
 
 import argparse
 import hashlib

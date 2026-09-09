@@ -90,11 +90,11 @@ historical result archive.
 | 11–13 | Accept an output path and require a new directory, preventing accidental replacement of local recordings. |
 | 14–15 | Set a 24 kHz sample rate and three explicit pitch/duration pairs. |
 | 16–18 | For each cue, start an empty PCM buffer and calculate its sample count. |
-| 19–21 | Visit each sample and apply a squared-sine envelope that reaches zero at both ends. |
-| 22–23 | Calculate a quiet sine wave and store it as signed little-endian 16-bit PCM. |
-| 24–26 | Write a mono, uncompressed WAV with the declared sample count and rate. |
-| 27–31 | Save the generator identity, absence of external recordings and each cue's parameters. |
-| 32–37 | Parse the required output directory only when the script is executed, then generate the files. |
+| 19–23 | Visit each sample and apply a squared-sine envelope that reaches zero at both ends. |
+| 24–25 | Calculate a quiet sine wave and store it as signed little-endian 16-bit PCM. |
+| 26–28 | Write a mono, uncompressed WAV with the declared sample count and rate. |
+| 29–33 | Save the generator identity, absence of external recordings and each cue's parameters. |
+| 34–39 | Parse the required output directory only when the script is executed, then generate the files. |
 
 The tones are for the clean export. The installed app's approved recordings are
 unchanged. This script uses no network service or third-party audio source.

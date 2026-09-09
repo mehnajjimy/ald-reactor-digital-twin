@@ -1,4 +1,4 @@
-"""Run synthetic cases and studies, or inspect their saved results."""
+"""run synthetic cases and studies, or inspect their saved results."""
 
 import argparse
 import json

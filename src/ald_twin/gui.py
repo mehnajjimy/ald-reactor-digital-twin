@@ -1,4 +1,4 @@
-"""Local browser workspace; calculations use the existing CLI in one worker."""
+"""local browser workspace; calculations use the existing cli in one worker."""
 
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -30,14 +30,16 @@ def read_json(path):
 
 
 def worker_command(input_path, output):
-    # A frozen executable is the application, not a Python interpreter.
+
+    # the bundled app dispatches workers through its own entry point.
+
     prefix = [sys.executable, "--worker"] if getattr(sys, "frozen", False) else [
         sys.executable, "-m", "ald_twin.cli"]
     return prefix+["simulate", str(input_path), "--output", str(output)]
 
 
 class Workspace:
-    """One local run at a time, with immutable completed output folders."""
+    """one local run at a time, with immutable completed output folders."""
 
     def __init__(self, directory):
         self.directory = Path(directory).resolve()
@@ -83,7 +85,8 @@ class Workspace:
         return dict(id=name, record=record, inputs=read_json(folder/"inputs.json"), ready=ready)
 
     def refresh(self):
-        """The worker must exit and its manifest verify before a result is ready."""
+        """the worker must exit and its manifest verify before a result is ready."""
+
         if not self.active or not self.active["running"] or self.process.poll() is None:
             return
         folder = self.folder(self.active["id"])
@@ -98,7 +101,9 @@ class Workspace:
         try:
             record = read_json(folder/"run.json") if (folder/"run.json").exists() else {}
         except (OSError, ValueError) as error:
-            # Retain the damaged file as evidence before recording the exit.
+
+            # keep the damaged record before saving the worker exit.
+
             damaged = folder/"run.json"
             if damaged.exists():
                 damaged.rename(folder/"run-damaged.json")
@@ -205,8 +210,10 @@ class Handler(BaseHTTPRequestHandler):
         port = self.server.server_port
         hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
         origin = self.headers.get("Origin")
-        # A random per-launch header plus an exact local origin prevents other
-        # browser pages from starting jobs or reading local run files.
+
+        # require the launch token and local origin so other browser pages
+        # cannot start jobs or read run files.
+
         return (self.headers.get("Host") in hosts
             and (origin is None or origin in {"http://"+host for host in hosts})
             and (not api or secrets.compare_digest(self.headers.get("X-Workspace-Token", ""), self.server.token)))
