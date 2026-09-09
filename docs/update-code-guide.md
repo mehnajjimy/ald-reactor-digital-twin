@@ -8,7 +8,7 @@ share an explanation; the source keeps its short functions and useful comments.
 | Lines | Meaning |
 |---|---|
 | 1–9 | Describe the manual lookup and import JSON, version matching, HTTP errors, URL encoding and HTTPS requests. Read the package's sole version constant. |
-| 11–12 | Leave the GitHub owner/repository empty until the owner creates it. |
+| 11–12 | Set the public release destination to `mehnajjimy/ald-reactor-digital-twin`. No credentials or run data are sent. |
 | 15–19 | Require a stable three-part numeric tag, optionally prefixed with `v`. Convert its parts to integers so 0.10.0 sorts after 0.9.0. Reject prereleases and malformed tags. |
 | 22–29 | Select the configured or explicitly supplied repository and prepare installed-version text. Missing or malformed locations return a local message without networking. |
 | 30–31 | Construct the fixed GitHub API endpoint and public JSON/User-Agent headers. No credentials or run inputs are sent. |

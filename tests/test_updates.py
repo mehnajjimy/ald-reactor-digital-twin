@@ -34,10 +34,10 @@ def test_newer_release_uses_numeric_version_and_fixed_github_destination(monkeyp
         calls.append((request, timeout))
         return response("v0.10.0", html_url="file:///untrusted")
     monkeypatch.setattr(updates, "urlopen", fetch)
-    message, url = updates.check_release("owner/reactor")
+    message, url = updates.check_release()
     assert "Latest release: v0.10.0" in message
-    assert url == "https://github.com/owner/reactor/releases/tag/v0.10.0"
-    assert calls[0][0].full_url == "https://api.github.com/repos/owner/reactor/releases/latest"
+    assert url == "https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/tag/v0.10.0"
+    assert calls[0][0].full_url == "https://api.github.com/repos/mehnajjimy/ald-reactor-digital-twin/releases/latest"
     assert calls[0][1] == 5
     assert not calls[0][0].has_header("Authorization")
 

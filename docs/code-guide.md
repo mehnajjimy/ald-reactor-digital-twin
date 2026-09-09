@@ -27,3 +27,5 @@ DEZ inputs remain synthetic placeholders.
 
 The [update and license guide](update-code-guide.md) explains the release checker,
 shared version and notice collector. See [release steps](release-guide.md).
+
+[README figures](readme-figures.md) explains the saved display data and plotting code.

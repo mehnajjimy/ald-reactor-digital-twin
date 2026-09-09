@@ -53,10 +53,10 @@ The local bundle uses an ad-hoc signature. Public Mac distribution requires
 its own Developer ID signing and notarization. No built app is included in this
 source folder.
 
-## Version 0.1.1
+## Version 0.1.2
 
-The repeated lower-left limits block is removed; numerical, recipe and physical
+The repeated sidebar and footer labels are removed; numerical, recipe and physical
 status remain separate in the results. The logo and sound toggle are unchanged.
 The desktop menu **Help → Check for Updates…** shows the installed version.
-The release location is deliberately unset until the owner creates GitHub;
-no network request occurs in that state. See the [release guide](release-guide.md).
+The update check now uses `mehnajjimy/ald-reactor-digital-twin`. Until a stable
+release is published, it reports that no public release was found. See the [release guide](release-guide.md).

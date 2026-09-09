@@ -8,8 +8,8 @@ from urllib.request import Request, urlopen
 
 from . import __version__
 
-# Set owner/repository after the owner creates the public GitHub repository.
-REPOSITORY = ""
+# Public release destination; the check never sends credentials or run data.
+REPOSITORY = "mehnajjimy/ald-reactor-digital-twin"
 
 
 def version_parts(tag):

@@ -117,7 +117,7 @@ synthetic placeholder; physical fitting stays blocked.
 | 70–73 | Define A pulse, A purge, B pulse and B purge numeric fields with explicit accessible residence-time labels, nonnegative input bounds and unrestricted decimal steps. Python still performs the authoritative validation. |
 | 74–76 | Add four decorative duration bars, their sequence labels and the calculated recipe-time text; close the recipe inputs. |
 | 77–79 | Show separate displayed-result numerical and recipe decisions plus the fixed blocked physical-fit status; close the inspector and body layout. |
-| 80–83 | Provide the initially hidden draft warning, accessible validation alerts, indeterminate activity bar and live status footer with synthetic model scope. |
+| 80–83 | Provide the initially hidden draft warning, accessible validation alerts, indeterminate activity bar and live status footer. The repeated model-scope tagline is removed. |
 | 84–86 | Close the workspace container, body and document. |
 
 ## `src/ald_twin/ui/workspace.css`

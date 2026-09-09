@@ -1,0 +1,34 @@
+{
+  "source": "runs/zno-example",
+  "kind": "synthetic",
+  "physical_fit_ready": false,
+  "accepted_cells": 640,
+  "recipe_residence_times": {
+    "a_pulse": 3.0,
+    "a_purge": 5.0,
+    "b_pulse": 3.0,
+    "b_purge": 5.0
+  },
+  "residence_s": 0.0011054195904904008,
+  "source_sha256": {
+    "inputs.json": "7bdc8bbc3b1818d722ddbf268b8a79cd388c8e09e28523176ecaf50e08ca3b50",
+    "run.json": "ba37c00de370b6846b2b96efb111d696fa5e03d7057bf0e192caf9ae812f0b86",
+    "grid-640.npz": "990eea106c6678c6305db97b0d82871793ca58a92817240642d4341a54655197",
+    "mixed.npz": "5038c4799fa4547d64a920f1ca7443d0fea56ae8a5d2f22564ed64dc1f8cb6f7",
+    "manifest.json": "1a971df4ba83696be0d22c580301c12ad7c0ae87476f10fbca48b2667050c020"
+  },
+  "plot_data_sha256": "f8f66377be521d944fe59c502e0b1db61650abb1c555a917b50714d05cc7e3ac",
+  "mass": "Conditional nu=1 bookkeeping: Gamma * (M_RETAINED_A * delta EA/Gamma + M_RETAINED_B * delta EB/Gamma). kg/m2 to ng/cm2: 1e8. Existing constants from ald_twin.cycles. Not measured mass or a calibrated QCM response.",
+  "projection": "Heatmaps average each four adjacent equal-area cells for display. Time samples, surface profile and weighted cycle means come from the saved accepted 640-cell cycle. No new solve.",
+  "decisions": {
+    "numerical": true,
+    "single_recipe": "pass",
+    "all_scenarios": "No recipe passed every scenario in the separate completed study."
+  },
+  "desktop": {
+    "build": "0.1.2",
+    "run": "run-20260909-133832-387627",
+    "sha256": "67201adaed890ac25c34c0961d9e1858f79bea93c66b59fbfbe3cd123d2a94f1",
+    "capture": "Actual native app window; unedited."
+  }
+}
