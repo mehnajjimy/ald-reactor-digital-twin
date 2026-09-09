@@ -1,0 +1,119 @@
+{
+  "identifier": "benchmark-a-frozen-dimensionless",
+  "kind": "synthetic",
+  "role": "dimensionless model reproduction; synthetic recipes, never an experimental run",
+  "source_doi": "https://doi.org/10.1116/1.3670396",
+  "source_access": "Prior source audit preserved in freeze; original full text not newly read in Phase 2",
+  "parameters": [
+    {
+      "name": "pe",
+      "symbol": "Pe",
+      "value": 65.0,
+      "units": "1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "directly_reported",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Reported group transcribed from the authoritative freeze; no fresh source re-audit in Phase 2."
+    },
+    {
+      "name": "da",
+      "symbol": "Da",
+      "value": 1550.0,
+      "units": "1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "directly_reported",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Reported group transcribed from the authoritative freeze; no fresh source re-audit in Phase 2."
+    },
+    {
+      "name": "gamma",
+      "symbol": "gamma",
+      "value": 2.5,
+      "units": "1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "directly_reported",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Reported group transcribed from the authoritative freeze; no fresh source re-audit in Phase 2."
+    },
+    {
+      "name": "beta0",
+      "symbol": "beta_0",
+      "value": 0.01,
+      "units": "1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "directly_reported",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Reported group transcribed from the authoritative freeze; no fresh source re-audit in Phase 2. Metadata only; already inside Da."
+    },
+    {
+      "name": "published_pulse_tau",
+      "symbol": "published_pulse_tau",
+      "value": null,
+      "units": "1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "unresolved",
+      "status": "UNRESOLVED",
+      "uncertainty": null,
+      "notes": "No accepted mapping in the freeze. Blocks dependent curve/physical runs; do not reconstruct."
+    },
+    {
+      "name": "published_readout_tau",
+      "symbol": "published_readout_tau",
+      "value": null,
+      "units": "1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "unresolved",
+      "status": "UNRESOLVED",
+      "uncertainty": null,
+      "notes": "No accepted mapping in the freeze. Blocks dependent curve/physical runs; do not reconstruct."
+    },
+    {
+      "name": "seconds_per_tau",
+      "symbol": "seconds_per_tau",
+      "value": null,
+      "units": "s",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "unresolved",
+      "status": "UNRESOLVED",
+      "uncertainty": null,
+      "notes": "No accepted mapping in the freeze. Blocks dependent curve/physical runs; do not reconstruct."
+    },
+    {
+      "name": "experimental_u",
+      "symbol": "experimental_u",
+      "value": null,
+      "units": "m s^-1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "unresolved",
+      "status": "UNRESOLVED",
+      "uncertainty": null,
+      "notes": "No accepted mapping in the freeze. Blocks dependent curve/physical runs; do not reconstruct."
+    },
+    {
+      "name": "experimental_D",
+      "symbol": "experimental_D",
+      "value": null,
+      "units": "m^2 s^-1",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "unresolved",
+      "status": "UNRESOLVED",
+      "uncertainty": null,
+      "notes": "No accepted mapping in the freeze. Blocks dependent curve/physical runs; do not reconstruct."
+    },
+    {
+      "name": "experimental_coordinate_origin",
+      "symbol": "experimental_coordinate_origin",
+      "value": null,
+      "units": "m",
+      "source": "docs/implementation-freeze.md Section 5; prior audit of doi:10.1116/1.3670396",
+      "source_type": "unresolved",
+      "status": "UNRESOLVED",
+      "uncertainty": null,
+      "notes": "No accepted mapping in the freeze. Blocks dependent curve/physical runs; do not reconstruct."
+    }
+  ]
+}

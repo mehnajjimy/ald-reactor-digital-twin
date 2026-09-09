@@ -1,0 +1,32 @@
+{
+  "kind": "synthetic",
+  "description": "Mathematical full-cycle tests on a declared channel scale; not reconstructed DEZ experiments.",
+  "channel": {
+    "length": 0.05,
+    "width": 0.05,
+    "height": 0.002,
+    "temperature": 423.15,
+    "outlet_pressure": 200.0,
+    "molar_flow": 0.00037,
+    "viscosity": 0.000023
+  },
+  "fraction_scale": 0.01,
+  "peclet_numbers": [0.2, 2.0, 20.0],
+  "damkohler_numbers": [1.0, 3.0, 10.0],
+  "pulse_residence_ratios": [0.75, 1.5, 3.0],
+  "water_pulse_residence_ratio": 3.0,
+  "purge_residence_ratio": 5.0,
+  "rate_b_over_a": 1.2,
+  "water_diffusivity_over_a": 1.0,
+  "capacity_over_carrier_trace_inventory": 1.0,
+  "density_kg_m3": 5400.0,
+  "units": {
+    "channel": "m, K, Pa, mol/s, Pa s",
+    "fraction_scale": "1",
+    "diffusivity": "Derived synthetic Pe gives D_ref at outlet pressure; neither species is a physical DEZ/H2O property.",
+    "capacity": "Gamma*S = factor * carrier_inventory * fraction_scale",
+    "rates": "Da = Gamma*kA*C_mean*S/F; kB/kA is explicitly fixed for the comparison."
+  },
+  "physical_dez_diffusivity": null,
+  "physical_fit_ready": false
+}

@@ -1,0 +1,114 @@
+{
+  "identifier": "phase1-zero-0d-v1",
+  "kind": "synthetic",
+  "parameters": [
+    {
+      "name": "volume",
+      "symbol": "volume",
+      "value": 0.00002,
+      "units": "m^3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "reactive_area",
+      "symbol": "reactive_area",
+      "value": 0.02,
+      "units": "m^2",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "throughput",
+      "symbol": "throughput",
+      "value": 0.00002,
+      "units": "m^3 s^-1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "capacity",
+      "symbol": "capacity",
+      "value": 0.00002,
+      "units": "mol m^-2",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "capture_velocity",
+      "symbol": "capture_velocity",
+      "value": 0.002,
+      "units": "m s^-1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "concentration_scale",
+      "symbol": "concentration_scale",
+      "value": 0.01,
+      "units": "mol m^-3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "initial_c",
+      "symbol": "initial_c",
+      "value": 0,
+      "units": "mol m^-3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "initial_theta",
+      "symbol": "initial_theta",
+      "value": 0.3,
+      "units": "1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "duration",
+      "symbol": "duration",
+      "value": 10,
+      "units": "s",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    }
+  ],
+  "settings": {
+    "output_samples": 101,
+    "rtol": 1e-8,
+    "atol": 1e-10,
+    "max_step": 0.05,
+    "refinement_rtol": 1e-9,
+    "refinement_atol": 1e-11,
+    "refinement_max_step": 0.025
+  }
+}

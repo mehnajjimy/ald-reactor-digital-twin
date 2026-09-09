@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ald-reactor-digital-twin"
+dynamic = ["version"]
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/**/*"]
+description = "Verified synthetic ALD cycle and transport studies"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["numpy>=2", "scipy>=1.14"]
+
+[project.scripts]
+ald-twin = "ald_twin.cli:main"
+ald-reactor = "ald_twin.desktop:main"
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+verification = ["matplotlib>=3.9"]
+desktop = ["pywebview==6.2.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "ald_twin.__version__"}
+
+[tool.setuptools.package-data]
+ald_twin = ["process_view.html", "processes/*.json", "ui/*.html", "ui/*.css", "ui/*.js", "ui/audio/*.wav", "ui/audio/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

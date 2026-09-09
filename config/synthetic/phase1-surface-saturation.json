@@ -1,0 +1,60 @@
+{
+  "identifier": "phase1-surface-saturation-v1",
+  "kind": "synthetic",
+  "parameters": [
+    {
+      "name": "capacity",
+      "symbol": "capacity",
+      "value": 0.00002,
+      "units": "mol m^-2",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "capture_velocity",
+      "symbol": "capture_velocity",
+      "value": 0.004,
+      "units": "m s^-1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "inlet_concentration",
+      "symbol": "inlet_concentration",
+      "value": 0.015,
+      "units": "mol m^-3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "initial_theta",
+      "symbol": "initial_theta",
+      "value": 0.17,
+      "units": "1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    }
+  ],
+  "settings": {
+    "e_folding_times": 10,
+    "output_samples": 1001,
+    "rtol": 1e-8,
+    "atol": 1e-10,
+    "max_step": 0.05,
+    "refinement_rtol": 1e-9,
+    "refinement_atol": 1e-11,
+    "refinement_max_step": 0.025
+  }
+}

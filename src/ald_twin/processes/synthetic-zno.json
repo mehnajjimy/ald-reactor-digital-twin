@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "synthetic-zno",
+  "name": "Synthetic ZnO-equivalent example",
+  "kind": "synthetic",
+  "physical_fit_ready": false,
+  "model": "two-event-nu1",
+  "species": {
+    "a": "DEZ-like synthetic A",
+    "b": "Water-like synthetic B"
+  },
+  "channel": {
+    "length": 0.05,
+    "width": 0.05,
+    "height": 0.002,
+    "temperature": 423.15,
+    "outlet_pressure": 200.0,
+    "molar_flow": 0.00037,
+    "viscosity": 2.3e-05
+  },
+  "reactive_interval": [
+    0,
+    0.05
+  ],
+  "fraction_scale": 0.01,
+  "diffusivity": {
+    "a": {
+      "kind": "synthetic",
+      "source": "Declared mathematical Peclet regime, not DEZ transport",
+      "value": 1.6271974963030889,
+      "temperature": 423.15,
+      "pressure": 200.0,
+      "source_type": "synthetic_verification",
+      "uncertainty": null
+    },
+    "b": {
+      "kind": "synthetic",
+      "source": "Declared mathematical Peclet regime, not DEZ transport",
+      "value": 1.6271974963030889,
+      "temperature": 423.15,
+      "pressure": 200.0,
+      "source_type": "synthetic_verification",
+      "uncertainty": null
+    }
+  },
+  "chemistry": {
+    "capacity": 8.180104969628964e-07,
+    "rate_a": 3317685.5484434483,
+    "rate_b": 3981222.6581321377
+  },
+  "recipe": {
+    "a_pulse": 3.0,
+    "a_purge": 5.0,
+    "b_pulse": 3.0,
+    "b_purge": 5.0
+  },
+  "film": {
+    "mapping": "conditional-zno-150c",
+    "density_kg_m3": 5400.0
+  },
+  "spatial_grids": [
+    320,
+    640,
+    1280,
+    2560
+  ],
+  "units": {
+    "channel.length": "m",
+    "channel.width": "m",
+    "channel.height": "m",
+    "channel.temperature": "K",
+    "channel.outlet_pressure": "Pa",
+    "channel.molar_flow": "mol/s",
+    "channel.viscosity": "Pa s",
+    "reactive_interval": "m",
+    "diffusivity": "m2/s at reference K and Pa",
+    "chemistry.capacity": "mol/m2",
+    "chemistry.rate_a": "m3/(mol s)",
+    "chemistry.rate_b": "m3/(mol s)",
+    "fraction_scale": "1",
+    "recipe": "residence times"
+  },
+  "provenance": {
+    "channel": {
+      "source_type": "synthetic_verification",
+      "source": "Declared mathematical channel from config/synthetic/phase45.json; not a reconstructed reactor.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "diffusivity": {
+      "source_type": "synthetic_verification",
+      "source": "Explicit values derived by cycle_study.case_parameters at Pe=2, Da=3 using config/synthetic/phase45.json; not measured DEZ/water properties.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "chemistry": {
+      "source_type": "synthetic_verification",
+      "source": "Explicit values derived by cycle_study.case_parameters at Pe=2, Da=3; no measured or fitted kinetics.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "recipe": {
+      "source_type": "synthetic_verification",
+      "source": "One declared A/purge/B/purge mathematical example, in residence times.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "film": {
+      "source_type": "synthetic_verification",
+      "source": "Conditional equivalent ZnO mapping only: existing M_ZNO and 5400 kg/m3 at 150 C. This is not experimental growth.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    }
+  }
+}

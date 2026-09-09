@@ -1,0 +1,24 @@
+{
+  "kind": "synthetic",
+  "description": "Finite software scenarios; no physical probability or confidence interpretation.",
+  "peclet": 2.0,
+  "damkohler": 3.0,
+  "a_pulse_ratios": [2.0, 3.0, 4.0],
+  "purge_ratios": [3.0, 5.0, 7.0],
+  "b_pulse_ratio": 3.0,
+  "scenarios": [
+    {"name": "reference", "factors": [1.0, 1.0, 1.0, 1.0]},
+    {"name": "lower-capacity", "factors": [0.9, 1.0, 1.0, 1.0]},
+    {"name": "higher-capacity", "factors": [1.1, 1.0, 1.0, 1.0]},
+    {"name": "slower-a", "factors": [1.0, 0.8, 1.0, 1.0]},
+    {"name": "slower-b", "factors": [1.0, 1.0, 0.8, 1.0]},
+    {"name": "slower-diffusion", "factors": [1.0, 1.0, 1.0, 0.8]},
+    {"name": "joint-change", "factors": [1.1, 0.8, 0.8, 0.8]}
+  ],
+  "factor_order": ["Gamma", "kA", "kB", "D_A"],
+  "spatial_grids": [320, 640, 1280, 2560],
+  "selection_grid_ceiling": 5120,
+  "periodic_tolerance": 1e-7,
+  "physical_dez_diffusivity": null,
+  "physical_fit_ready": false
+}

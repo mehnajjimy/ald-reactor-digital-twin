@@ -1,0 +1,138 @@
+{
+  "identifier": "phase1a-core-v1",
+  "kind": "synthetic",
+  "parameters": [
+    {
+      "name": "length",
+      "symbol": "ell",
+      "value": 1,
+      "units": "m",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "area",
+      "symbol": "A_c",
+      "value": 0.01,
+      "units": "m^2",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "reactive_perimeter",
+      "symbol": "P_r",
+      "value": 0.2,
+      "units": "m",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "velocity",
+      "symbol": "u",
+      "value": 0.5,
+      "units": "m s^-1",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "diffusivity",
+      "symbol": "D",
+      "value": 0.1,
+      "units": "m^2 s^-1",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "capacity",
+      "symbol": "Gamma",
+      "value": 0.02,
+      "units": "mol m^-2",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "capture_velocity",
+      "symbol": "k_cap",
+      "value": 0.05,
+      "units": "m s^-1",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "concentration_scale",
+      "symbol": "c_scale",
+      "value": 0.1,
+      "units": "mol m^-3",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "inlet_molar_flow",
+      "symbol": "F_in",
+      "value": 0.0005,
+      "units": "mol s^-1",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "pulse_duration",
+      "symbol": "t_p",
+      "value": 0.6,
+      "units": "s",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "purge_duration",
+      "symbol": "t_purge",
+      "value": 1,
+      "units": "s",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    },
+    {
+      "name": "cells",
+      "symbol": "N",
+      "value": 80,
+      "units": "1",
+      "source": "Deliberately selected Phase 1A synthetic verification fixture; no experimental source.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "Mathematical test input, not a measured property or accepted reactor condition."
+    }
+  ]
+}

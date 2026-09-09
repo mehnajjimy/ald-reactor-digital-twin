@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALD recipe study — synthetic results</title>
+<style>
+* {
+  box-sizing:border-box}
+body {
+  margin:0;
+  background:#f3f6f9;
+  color:#162b41;
+  font:16px/1.5 system-ui,sans-serif}
+header,main {
+  max-width:1220px;
+  margin:auto;
+  padding:24px}
+header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px}
+h1 {
+  font-size:28px;
+  margin:0}
+h2 {
+  font-size:20px;
+  margin:0 0 16px}
+p {
+  margin:8px 0}
+.badge {
+  padding:5px 12px;
+  border-radius:5px;
+  background:#e4edf8;
+  color:#214e8a;
+  font-size:14px;
+  font-weight:650}
+.notice {
+  background:#fff1c9;
+  border-left:4px solid #b78b12;
+  padding:12px 18px;
+  margin-bottom:24px}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:24px}
+.stat,.panel {
+  background:white;
+  border:1px solid #d8e1e9;
+  border-radius:8px;
+  padding:20px}
+.stat strong {
+  display:block;
+  font-size:24px}
+.muted,small {
+  color:#526679}
+small {
+  font-size:14px}
+.workspace {
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:20px}
+label {
+  display:block;
+  font-weight:650;
+  margin:0 0 8px}
+select {
+  width:100%;
+  font:inherit;
+  padding:10px;
+  border:1px solid #9fb1c2;
+  background:white;
+  border-radius:4px;
+  margin-bottom:22px}
+a {
+  color:#1d5899}
+a:focus-visible,select:focus-visible {
+  outline:3px solid #d89b08;
+  outline-offset:3px}
+.result-head {
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:center}
+.state {
+  padding:5px 10px;
+  border-radius:4px;
+  font-size:14px;
+  font-weight:650}
+.pass {
+  background:#c5ebdc;
+  color:#10513a}
+.fail {
+  background:#f7d8d0;
+  color:#842a1b}
+.unverified,.unresolved,.outside-screen {
+  background:#e5eaf0;
+  color:#30485f}
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0}
+th,td {
+  text-align:right;
+  padding:10px 8px;
+  border-bottom:1px solid #e0e6ec}
+th:first-child,td:first-child {
+  text-align:left}
+th {
+  font-size:14px;
+  color:#526679}
+svg {
+  display:block;
+  width:100%;
+  height:auto}
+svg text {
+  font-family:system-ui,sans-serif;
+  fill:#344b60;
+  font-size:14px}
+.legend {
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  font-size:14px;
+  margin:8px 0}
+.dot {
+  display:inline-block;
+  width:18px;
+  height:3px;
+  vertical-align:middle;
+  margin-right:6px}
+.links {
+  display:flex;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-top:24px}
+.details {
+  margin-top:24px}
+summary {
+  cursor:pointer;
+  font-weight:650}
+.factors {
+  font-size:14px;
+  overflow-wrap:anywhere}
+.empty {
+  padding:35px 0;
+  color:#526679}
+@media(max-width:760px) {
+  header {
+  align-items:flex-start}
+header,main {
+  padding:16px}
+.stats {
+  grid-template-columns:1fr}
+.workspace {
+  grid-template-columns:1fr}
+.panel {
+  padding:16px}
+.result-head {
+  align-items:flex-start}
+h1 {
+  font-size:24px}
+th,td {
+  padding:8px 4px;
+  font-size:14px}
+}
+</style>
+<header><div><h1>ALD recipe study</h1><p class="muted">150 °C · saved scenario comparisons</p></div><span class="badge">Synthetic only</span></header>
+<main>
+<div class="notice">Physical DEZ diffusivity is still pending. These are illustrative scenarios, not confidence intervals or operating recommendations.</div>
+<section class="stats" aria-label="Study summary">
+<div class="stat"><small>Numerically verified pairs</small><strong id="verified"></strong></div>
+<div class="stat"><small>Recipes passing every scenario</small><strong id="feasible"></strong></div>
+<div class="stat"><small>Nominal choice after finer-grid checks</small><strong id="selection"></strong></div>
+</section>
+<section class="workspace">
+<aside class="panel"><label for="recipe">Recipe</label><select id="recipe"></select><label for="scenario">Scenario</label><select id="scenario"></select><p class="muted">Durations use the carrier residence time, τ. Both purges have the selected duration.</p><p id="durations"></p><hr><p class="factors" id="factors"></p><small>Factors are declared examples, with no assigned probability.</small></aside>
+<article class="panel" aria-live="polite">
+<div class="result-head"><h2 id="result-title">Recipe result</h2><span id="state" class="state"></span></div>
+<p class="muted" id="verification"></p>
+<div id="results">
+<table><thead><tr><th>Recurring-cycle output</th><th>0D mixed</th><th>1D spatial</th></tr></thead><tbody id="metrics"></tbody></table>
+<h2>A completion along the channel</h2>
+<div class="legend"><span><i class="dot" style="background:#246eaa"></i>0D mixed</span><span><i class="dot" style="background:#b34c34"></i>1D spatial</span></div>
+<svg id="profile" viewBox="0 0 740 290" role="img" aria-label="A completion along the channel"></svg>
+<small>Summary metrics use the full spatial grid. This curve shows a reduced set of positions.</small>
+</div><p id="empty" class="empty" hidden></p>
+</article>
+</section>
+<nav class="links" aria-label="Study reports"><a href="process-window.png">Process-window figure</a><a href="scenario-ranges.png">Scenario ranges</a><a href="recipe-candidates.png">Candidate comparison</a><a href="summary.json">Numerical summary</a><a href="report.md">Working notes</a></nav>
+<details class="panel details"><summary>Scope and acceptance rules</summary><p>Only the declared recipes and named scenarios are covered. An uncomputed point has no established feasibility.</p><p>A completion must reach 0.90, B remaining must be at most 0.10, and both scaled purge residuals must be at most 0.01. Cases also need numerical verification and the declared wall-transport screen. Near-threshold results stay unresolved.</p><p>Selections minimize prescribed cycle time and precursor delivery over the finite candidate list. Selected recipes receive an additional spatial and time check. Relative GPC spread is (maximum − minimum) / mean.</p><p>Source hashes, original cycles and failed attempts remain in the study records. This view does not run a different solver or estimate missing properties.</p></details>
+</main>
+<script id="study-data" type="application/json">__STUDY_DATA__</script>
+<script>
+const study=JSON.parse(document.getElementById('study-data').textContent);
+const byId=id=>document.getElementById(id);
+const labels={'pass':'Passes constraints','fail':'Fails constraints','unresolved':'Near threshold','unverified':'Not verified','outside-screen':'Outside wall screen'};
+const format=(value,digits=3)=>value==null?'Not defined':Number(value).toFixed(digits);
+for (const row of study.summary.recipes) {
+  const option = new Option(`A ${row.pulse_ratio}τ · purges ${row.purge_ratio}τ`, row.recipe);
+  byId('recipe').add(option);
+}
+for (const row of study.plan.scenarios) {
+  byId('scenario').add(new Option(row.name.replaceAll('-', ' '), row.name));
+}
+byId('verified').textContent=`${study.verified_pairs} / ${study.cases.length}`;
+byId('feasible').textContent=`${study.summary.recipes.filter(row=>row.all_scenarios==='pass').length} / ${study.summary.recipes.length}`;
+const selected=study.selections.all_scenarios;
+const nominal=study.selections.nominal;
+const chosen=study.summary.recipes.find(row=>row.recipe===nominal.selected);
+byId('selection').textContent=chosen?`A ${chosen.pulse_ratio}τ · purges ${chosen.purge_ratio}τ`:(nominal.status==='NO_FEASIBLE_CANDIDATE'?'No feasible candidate':'Not established');
+byId('recipe').value=selected.selected??study.selections.nominal.selected??study.summary.recipes[0].recipe;
+function draw(row){
+  const profile=row.profile, x=profile.z_m.map(v=>v*1000), end=study.channel_length_m*1000;
+  const xx=v=>54+(v/end)*662, yy=v=>236-v*205;
+  let svg='<line x1="54" y1="236" x2="716" y2="236" stroke="#9dafbf"/>';
+  for(const value of [0,.25,.5,.75,1])svg+=`<line x1="54" y1="${yy(value)}" x2="716" y2="${yy(value)}" stroke="#e2e8ef"/><text x="42" y="${yy(value)+5}" text-anchor="end">${value}</text>`;
+  for(const value of [0,end/2,end])svg+=`<text x="${xx(value)}" y="262" text-anchor="middle">${value.toFixed(0)}</text>`;
+  svg+='<text x="385" y="287" text-anchor="middle">Position (mm)</text>';
+  svg+=`<line x1="54" y1="${yy(.9)}" x2="716" y2="${yy(.9)}" stroke="#647687" stroke-dasharray="3 4"/>`;
+  const mixed=row.models.mixed.metrics.mean_a_completion;
+  svg+=`<line x1="54" y1="${yy(mixed)}" x2="716" y2="${yy(mixed)}" stroke="#246eaa" stroke-width="2.5" stroke-dasharray="8 5"/>`;
+  const curve=profile.a_completion.map((value,index)=>`${index?'L':'M'}${xx(x[index]).toFixed(2)},${yy(value).toFixed(2)}`).join(' ');
+  svg+=`<path d="${curve}" fill="none" stroke="#b34c34" stroke-width="3"/>`;
+  byId('profile').innerHTML=svg;
+}
+function update(){
+  const row=study.cases.find(row=>row.recipe===byId('recipe').value&&row.scenario.name===byId('scenario').value);
+  byId('state').textContent=labels[row.state];
+  byId('state').className=`state ${row.state}`;
+  byId('result-title').textContent=`A ${row.pulse_ratio}τ · purges ${row.purge_ratio}τ`;
+  byId('verification').textContent=row.status==='PASS'?`Numerical checks passed · ${row.cells} spatial cells`:(row.reason??'Numerical verification is incomplete.');
+  byId('durations').textContent=`τ = ${format(row.residence_s*1000)} ms. B pulse = ${study.plan.b_pulse_ratio}τ.`;
+  byId('factors').textContent=study.plan.factor_order.map((name,i)=>`${name} × ${row.scenario.factors[i]}`).join(' · ');
+  byId('results').hidden=!row.models;
+  byId('empty').hidden=!!row.models;
+  byId('empty').textContent='No accepted model comparison is available for this trial.';
+  if(!row.models)return;
+  const fields = [
+    ['mean_gpc_angstrom', 'Mean equivalent GPC (Å/cycle)', 1],
+    ['minimum_a_completion', 'Minimum A completion (%)', 100],
+    ['maximum_b_remaining', 'Maximum B remaining (%)', 100],
+    ['relative_gpc_spread', 'Relative GPC spread (%)', 100],
+    ['purge_a_residual', 'A purge residual (scaled fraction)', 1],
+    ['purge_b_residual', 'B purge residual (scaled fraction)', 1],
+    ['purge_crossing_s', 'A purge clearance (ms)', 1000, 0],
+    ['purge_crossing_s', 'B purge clearance (ms)', 1000, 1]
+  ];
+  byId('metrics').replaceChildren();
+  for(const [name,label,factor,index] of fields){
+    const tr=document.createElement('tr');
+    const values=['mixed','spatial'].map(model=>{
+      const metric=row.models[model].metrics[name], number=index==null?metric:metric[index];
+      if(number==null)return name==='purge_crossing_s'?'Not cleared':'Not defined';
+      return name.includes('residual')?number.toExponential(3):format(number*factor);
+    });
+    for (const value of [label, ...values]) {
+      const td = document.createElement('td');
+      td.textContent = value;
+      tr.append(td);
+    }
+    byId('metrics').append(tr);
+  }
+  draw(row);
+}
+byId('recipe').addEventListener('change', update);
+byId('scenario').addEventListener('change', update);
+update();
+</script>
+</html>

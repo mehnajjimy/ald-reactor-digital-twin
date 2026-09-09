@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="workspace-token" content="__WORKSPACE_TOKEN__">
+  <meta name="desktop" content="__DESKTOP__">
+  <title>ALD · Reactor workspace</title>
+  <link rel="stylesheet" href="/workspace.css">
+  <script src="/workspace.js" defer></script>
+</head>
+<body>
+<div id="reactor-workspace">
+  <header class="rx-header">
+    <span class="rx-logo">ALD</span><span class="rx-name">Reactor workspace</span>
+    <div class="rx-spacer"></div>
+    <button id="sound-toggle" aria-pressed="false">Sounds off</button>
+  </header>
+  <div class="rx-toolbar">
+    <button id="open-inputs">Open inputs</button><input id="input-file" type="file" accept=".json,application/json" hidden>
+    <span class="rx-path" id="process-name">Loading workspace…</span><span class="rx-spacer"></span>
+    <button id="report" disabled>Save report</button><button id="stop" hidden>Stop</button>
+    <button class="rx-primary" id="run" disabled>Run simulation</button>
+  </div>
+  <div class="rx-body">
+    <aside class="rx-explorer" aria-label="Project">
+      <h2 class="rx-panel-title">Project</h2><div class="rx-group-label">PROCESSES</div>
+      <div id="process-list"></div>
+      <div class="rx-group-label">SAVED RUNS</div>
+      <div class="rx-properties rx-run-picker"><label for="saved-run" class="rx-meta">Open a result</label><select id="saved-run"><option value="">No saved runs</option></select></div>
+      <div class="rx-group-label">REACTOR</div><div class="rx-properties" id="reactor-values"></div>
+    </aside>
+    <main class="rx-work">
+      <nav class="rx-tabs" aria-label="Workspace views">
+        <button class="rx-tab" data-view="results" aria-pressed="true">Results</button>
+        <button class="rx-tab" data-view="inputs" aria-pressed="false">Inputs</button>
+        <button class="rx-tab" data-view="compare" aria-pressed="false">Compare</button>
+      </nav>
+      <section class="rx-view" id="results" aria-label="Results">
+        <div class="rx-meta rx-result-origin" id="result-origin">No result selected</div>
+        <div id="result-data" hidden>
+          <div class="rx-heading-row"><h2>Surface turnover</h2><span class="rx-meta" id="grid"></span></div>
+          <div id="profile-panel">
+            <div class="rx-legend"><span><i class="rx-swatch"></i>1D spatial</span><span><i class="rx-swatch rx-dashed"></i>0D mixed</span></div>
+            <svg class="rx-plot" id="chart" role="img" aria-label="Surface turnover per cycle along the reactor channel"></svg>
+          </div>
+          <div class="rx-heading-row"><h2>Cycle outputs</h2></div>
+          <div class="rx-table-wrap"><table><thead><tr><th>Quantity</th><th>0D mixed</th><th>1D spatial</th></tr></thead><tbody id="metrics"></tbody></table></div>
+          <div class="rx-note" id="film-note"></div>
+        </div>
+        <p id="empty-result" class="rx-doc-line">Choose a process and run a recipe, or open a saved result.</p>
+        <p id="result-reason" class="rx-error" hidden></p>
+        <details id="attempt-panel" hidden><summary>Numerical checks</summary><div class="rx-table-wrap"><table><tbody id="diagnostics"></tbody></table><table><thead><tr><th>Attempt</th><th>Cells</th><th>Status</th></tr></thead><tbody id="attempts"></tbody></table></div></details>
+      </section>
+      <section class="rx-view" id="inputs" aria-label="Required inputs" hidden>
+        <div class="rx-heading-row"><h2>Required inputs</h2><button id="save-inputs">Save inputs</button></div>
+        <div class="rx-table-wrap"><table class="rx-inputs"><thead><tr><th>Input</th><th>Value</th><th>Unit</th></tr></thead><tbody id="input-rows"></tbody></table></div>
+        <details class="rx-sources"><summary>Sources and model scope</summary><div id="sources"></div></details>
+      </section>
+      <section class="rx-view" id="compare" aria-label="Saved comparison" hidden>
+        <h2>Compare saved runs</h2>
+        <div class="rx-compare-pickers"><label>First run<select id="compare-first"></select></label><label>Second run<select id="compare-second"></select></label></div>
+        <p class="rx-doc-line" id="compare-empty">Complete two runs to compare their saved outputs.</p>
+        <div class="rx-table-wrap" id="comparison-table" hidden><table><thead><tr><th>Quantity</th><th>First run</th><th>Second run</th></tr></thead><tbody id="comparison"></tbody></table></div>
+      </section>
+    </main>
+    <aside class="rx-inspector" aria-label="Recipe inspector">
+      <h2 class="rx-panel-title">Recipe</h2>
+      <div class="rx-properties">
+        <label class="rx-field">A pulse<input data-recipe="a_pulse" aria-label="A pulse in residence times" type="number" min="0" max="20" step="any"><span>τ</span></label>
+        <label class="rx-field">A purge<input data-recipe="a_purge" aria-label="A purge in residence times" type="number" min="0" max="20" step="any"><span>τ</span></label>
+        <label class="rx-field">B pulse<input data-recipe="b_pulse" aria-label="B pulse in residence times" type="number" min="0" max="20" step="any"><span>τ</span></label>
+        <label class="rx-field">B purge<input data-recipe="b_purge" aria-label="B purge in residence times" type="number" min="0" max="20" step="any"><span>τ</span></label>
+        <div class="rx-sequence" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="rx-meta">A → purge → B → purge</div>
+        <div class="rx-note" id="recipe-time"></div>
+      </div>
+      <div class="rx-checks"><div>Displayed result</div><div><span>Numerical</span><strong id="numerical">—</strong></div><div><span>Recipe</span><strong id="feasible">—</strong></div><div><span>Physical fit</span><strong>Blocked</strong></div></div>
+    </aside>
+  </div>
+  <div class="rx-draft" id="draft" hidden>Inputs differ from the displayed result. Run to calculate this recipe.</div>
+  <div class="rx-validation" id="validation" role="alert" hidden></div>
+  <div class="rx-progress" id="progress" role="progressbar" aria-label="Simulation running" hidden><div></div></div>
+  <footer class="rx-status"><span id="status-text" aria-live="polite">Connecting…</span><span>Synthetic · two-event model</span></footer>
+</div>
+</body>
+</html>

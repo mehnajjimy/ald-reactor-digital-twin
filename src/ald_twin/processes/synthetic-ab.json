@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "synthetic-ab",
+  "name": "Fictional A/B surface-turnover example",
+  "kind": "synthetic",
+  "physical_fit_ready": false,
+  "model": "two-event-nu1",
+  "species": {
+    "a": "Fictional precursor A*",
+    "b": "Fictional co-reactant B*"
+  },
+  "channel": {
+    "length": 0.05,
+    "width": 0.05,
+    "height": 0.002,
+    "temperature": 423.15,
+    "outlet_pressure": 200.0,
+    "molar_flow": 0.00037,
+    "viscosity": 2.3e-05
+  },
+  "reactive_interval": [
+    0,
+    0.05
+  ],
+  "fraction_scale": 0.01,
+  "diffusivity": {
+    "a": {
+      "kind": "synthetic",
+      "source": "Fictional A/B transport input for a software example only",
+      "value": 1.6271974963030889,
+      "temperature": 423.15,
+      "pressure": 200.0,
+      "source_type": "synthetic_verification",
+      "uncertainty": null
+    },
+    "b": {
+      "kind": "synthetic",
+      "source": "Fictional A/B transport input for a software example only",
+      "value": 1.139038247412162,
+      "temperature": 423.15,
+      "pressure": 200.0,
+      "source_type": "synthetic_verification",
+      "uncertainty": null
+    }
+  },
+  "chemistry": {
+    "capacity": 6.544083975703171e-07,
+    "rate_a": 3317685.5484434483,
+    "rate_b": 2388733.5948792826
+  },
+  "recipe": {
+    "a_pulse": 3.0,
+    "a_purge": 5.0,
+    "b_pulse": 3.0,
+    "b_purge": 5.0
+  },
+  "film": null,
+  "spatial_grids": [
+    320,
+    640,
+    1280,
+    2560
+  ],
+  "units": {
+    "channel.length": "m",
+    "channel.width": "m",
+    "channel.height": "m",
+    "channel.temperature": "K",
+    "channel.outlet_pressure": "Pa",
+    "channel.molar_flow": "mol/s",
+    "channel.viscosity": "Pa s",
+    "reactive_interval": "m",
+    "diffusivity": "m2/s at reference K and Pa",
+    "chemistry.capacity": "mol/m2",
+    "chemistry.rate_a": "m3/(mol s)",
+    "chemistry.rate_b": "m3/(mol s)",
+    "fraction_scale": "1",
+    "recipe": "residence times"
+  },
+  "provenance": {
+    "channel": {
+      "source_type": "synthetic_verification",
+      "source": "Declared mathematical channel from config/synthetic/phase45.json; not a reconstructed reactor.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "diffusivity": {
+      "source_type": "synthetic_verification",
+      "source": "Software demonstration: B diffusivity is 0.7 times the first example, A unchanged; neither value is a physical property.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "chemistry": {
+      "source_type": "synthetic_verification",
+      "source": "Software demonstration: 0.8 times the first example capacity and 0.6 times its B rate; no real material is represented.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "recipe": {
+      "source_type": "synthetic_verification",
+      "source": "One declared A/purge/B/purge mathematical example, in residence times.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    },
+    "film": {
+      "source_type": "synthetic_verification",
+      "source": "No chemical identity, retained mass or density has been established; report turnover only.",
+      "validity": "This synthetic example at 423.15 K only; no experimental validity or uncertainty distribution.",
+      "uncertainty": null
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "identifier": "phase1-advection-pulse-v1",
+  "kind": "synthetic",
+  "parameters": [
+    {
+      "name": "length",
+      "symbol": "length",
+      "value": 1.5,
+      "units": "m",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "area",
+      "symbol": "area",
+      "value": 1,
+      "units": "m^2",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "reactive_perimeter",
+      "symbol": "reactive_perimeter",
+      "value": 1,
+      "units": "m",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "velocity",
+      "symbol": "velocity",
+      "value": 1,
+      "units": "m s^-1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "diffusivity",
+      "symbol": "diffusivity",
+      "value": 0,
+      "units": "m^2 s^-1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "capacity",
+      "symbol": "capacity",
+      "value": 1,
+      "units": "mol m^-2",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "capture_velocity",
+      "symbol": "capture_velocity",
+      "value": 0,
+      "units": "m s^-1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "concentration_scale",
+      "symbol": "concentration_scale",
+      "value": 1,
+      "units": "mol m^-3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "inlet_concentration",
+      "symbol": "inlet_concentration",
+      "value": 1,
+      "units": "mol m^-3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "initial_c",
+      "symbol": "initial_c",
+      "value": 0,
+      "units": "mol m^-3",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "initial_theta",
+      "symbol": "initial_theta",
+      "value": 0,
+      "units": "1",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "pulse_duration",
+      "symbol": "pulse_duration",
+      "value": 1,
+      "units": "s",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    },
+    {
+      "name": "purge_duration",
+      "symbol": "purge_duration",
+      "value": 0.25,
+      "units": "s",
+      "source": "Frozen Phase 1B synthetic verification fixture; deliberately selected mathematical inputs.",
+      "source_type": "synthetic_verification",
+      "status": "LOCKED",
+      "uncertainty": null,
+      "notes": "No experimental interpretation. Variants and numerical controls are explicitly recorded in settings."
+    }
+  ],
+  "settings": {
+    "grids": [
+      8192,
+      16384,
+      32768
+    ],
+    "output_samples": 51,
+    "boundary": "advection",
+    "final_l1_tolerance": 0.01,
+    "rtol": 1e-8,
+    "atol": 1e-10,
+    "max_step": 0.05,
+    "refinement_rtol": 1e-9,
+    "refinement_atol": 1e-11,
+    "refinement_max_step": 0.025
+  }
+}
