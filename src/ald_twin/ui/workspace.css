@@ -12,7 +12,7 @@ body { margin: 0; }
 #reactor-workspace input[type=checkbox] { accent-color:#3583b2; width:15px; height:15px; }
 #reactor-workspace input[type=range] { accent-color:#3583b2; padding:0; width:110px; }
 #reactor-workspace .rx-header { display:flex; align-items:center; gap:12px; padding:10px 14px; background:#f5f6f7; border-bottom:1px solid #cbd2d8; }
-#reactor-workspace .rx-logo { background:#e2f1fb; border:1px solid #83b9da; color:#28658a; width:34px; height:31px; display:grid; place-items:center; font-weight:600; font-size:11px; letter-spacing:.5px; }
+#reactor-workspace .rx-logo { display:block; width:34px; height:34px; object-fit:contain; }
 #reactor-workspace .rx-name { font-weight:600; font-size:14px; }
 #reactor-workspace .rx-preview { color:var(--rx-muted); font-size:11px; margin-left:2px; }
 #reactor-workspace .rx-spacer { flex:1; }

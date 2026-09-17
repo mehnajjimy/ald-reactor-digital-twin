@@ -31,14 +31,19 @@ the interpreter build project's license collection; do not infer exact library
 versions from those notice filenames. Recheck the inventory when changing runtimes.
 See [PyInstaller's license explanation](https://pyinstaller.org/en/stable/license.html).
 
-The existing ALD monogram comes from `packaging/make_icon.py`. This release does
-not include or modify the separate lily concepts. The public source export uses
-original tones from `packaging/make_public_sounds.py`, covered by the project
-license. Supplied recordings under the research checkout's `ui/audio/`, source
-archives, papers and private data are excluded from that license and public export.
-The locally installed app retains the supplied sounds for personal use; do not
-redistribute that local bundle as the public build. Build a public app from the
-clean source export instead.
+The lily icons use the owner's supplied full render from `LILY_BRAND_ASSETS_V3`,
+added at the owner's request on 2026-09-16. The white-backed
+`github/github-profile-from-gimp-512.png` is retained as `packaging/ald-reactor.png`;
+`packaging/make_icon.py` packages it for macOS. Its supplied transparent companion,
+`github/github-profile-from-gimp-transparent-512.png`, is retained as
+`src/ald_twin/ui/lily.png` so the workspace header shows no white square.
+The artwork is provided for this app's branding; the code's MIT license does
+not grant a separate license to reuse the owner's branding.
+
+The public source uses original tones from `packaging/make_public_sounds.py`,
+covered by the project license. Supplied recordings in the research checkout,
+source archives, papers and private data are excluded from the public export.
+Build public apps from the clean source export.
 
 Software citation is requested through `CITATION.cff`; it is not an additional
 condition on MIT reuse. No external source's license or ownership is changed by

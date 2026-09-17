@@ -28,7 +28,7 @@ where = ["src"]
 version = {attr = "ald_twin.__version__"}
 
 [tool.setuptools.package-data]
-ald_twin = ["process_view.html", "processes/*.json", "ui/*.html", "ui/*.css", "ui/*.js", "ui/audio/*.wav", "ui/audio/*.json"]
+ald_twin = ["process_view.html", "processes/*.json", "ui/*.png", "ui/*.html", "ui/*.css", "ui/*.js", "ui/audio/*.wav", "ui/audio/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

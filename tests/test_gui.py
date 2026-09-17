@@ -47,7 +47,7 @@ def test_gui_serves_assets_and_only_the_simple_sound_toggle(server):
     assert status == 200 and server.token.encode() in html
     assert b"Sounds off" in html and b"Sound preferences" not in html
     assert b"Preview run" not in html and b"Run simulation" in html
-    for path in ("/workspace.css", "/workspace.js", "/audio/click.wav", "/audio/crystal.wav", "/audio/complete.wav"):
+    for path in ("/lily.png", "/workspace.css", "/workspace.js", "/audio/click.wav", "/audio/crystal.wav", "/audio/complete.wav"):
         assert request(server, path)[0] == 200
     assert request(server, "/../gui.py")[0] == 404
 

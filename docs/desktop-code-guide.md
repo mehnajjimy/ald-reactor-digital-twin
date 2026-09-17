@@ -70,12 +70,8 @@ Line numbers refer to this maintenance review and must follow later source edits
 
 | Lines | What they do and why |
 |---|---|
-| 1–4 | Describe the build-only icon generator and import filesystem paths plus Pillow's image and drawing tools. |
-| 6–9 | Create a transparent 1024-pixel-square image, attach a drawing context, draw the light rounded base and outline, then the blue horizontal accent. Coordinates and stroke widths are pixels. |
-| 11–15 | Use a fixed blue ink and straight strokes for the A and its crossbar. Fixed coordinates avoid an installed-font dependency. |
-| 16 | Draw the L with one connected stroke. |
-| 17–18 | Draw the D outline with connected coordinates, the same ink and a rounded stroke join. |
-| 19–21 | Find the script's folder and save PNG and Mac ICNS copies there. These are the icon files used by the bundle. |
+| 1–4 | Describe the icon build and import paths and Pillow. |
+| 6–8 | Open the supplied white-backed PNG beside the script and save its Mac ICNS. The workspace uses the supplied transparent companion. |
 
 `packaging/requirements-macos-lock.txt` pins one verified Mac build environment,
 including transitive libraries, the numerical runtime, tests and packaging tools.

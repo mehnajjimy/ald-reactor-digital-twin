@@ -242,7 +242,7 @@ class Handler(BaseHTTPRequestHandler):
                 name = path.removeprefix("/api/report/")
                 read_run(workspace.folder(name))
                 return self.send((workspace.folder(name)/"report.md").read_bytes(), content_type="text/plain; charset=utf-8")
-            assets = {"/workspace.css", "/workspace.js", "/audio/click.wav", "/audio/crystal.wav", "/audio/complete.wav"}
+            assets = {"/lily.png", "/workspace.css", "/workspace.js", "/audio/click.wav", "/audio/crystal.wav", "/audio/complete.wav"}
             if path in assets:
                 file = UI/path.lstrip("/")
                 return self.send(file.read_bytes(), content_type=mimetypes.guess_type(file.name)[0] or "application/octet-stream")
