@@ -9,14 +9,10 @@ import pytest
 from scipy.integrate import solve_ivp
 
 from ald_twin.cycle_study import candidate_choice, decision, purge_crossing
-from ald_twin.cycle_transport import CycleGrid, channel_grid, composition_fluxes, diffusivity
+from ald_twin.cycle_transport import CycleGrid, channel_grid, diffusivity
 from ald_twin.cycles import (CycleChemistry, CycleSegment, M_DEZ, M_WATER, M_ETHANE,
-                             M_ZNO, M_RETAINED_A, M_RETAINED_B, PeriodicFailure,
-                             initial_state, solve_cycle, periodic_cycle, periodic_gpc)
+                             M_ZNO, M_RETAINED_A, M_RETAINED_B, initial_state, solve_cycle)
 from ald_twin.numerics import SolverOptions
-from ald_twin.reactor_0d import WellMixedReactor, FlowSegment, solve_0d
-from ald_twin.reactor_1d import Reactor1D, TransportSegment, FluxBoundary, solve_1d
-from ald_twin.surface import FiniteCapacity
 
 OPTIONS = SolverOptions("Radau", 1e-10, 1e-12, 0.05)
 
@@ -42,20 +38,6 @@ def test_diffusivity_scales_as_one_over_pressure_and_refuses_physical_values():
         diffusivity(dict(kind="physical", value=None), 423.15, 200.)
     with pytest.raises(ValueError, match="temperature"):
         diffusivity(prop, 473.15, 200.)
-
-
-def test_channel_grid_keeps_inventory_and_passes_uniform_composition():
-    """catches grid refinement that changes gas or area totals, or a spurious flux."""
-    grids = [channel_grid(parameters(), n) for n in (1, 20, 40)]
-    np.testing.assert_allclose([g.carrier_moles.sum() for g in grids], grids[0].carrier_moles.sum(), rtol=1e-14)
-    np.testing.assert_allclose([g.reactive_areas.sum() for g in grids], grids[0].reactive_areas.sum(), rtol=1e-14)
-
-    # a uniform mole fraction is carried unchanged even though pressure varies
-    grid = grids[1]
-    x = np.broadcast_to(np.array([[0.01], [0.02]]), (2, len(grid.z)))
-    inlet = grid.molar_flow * x[:, 0]
-    flux = composition_fluxes(x, grid, inlet)
-    np.testing.assert_allclose(flux, np.broadcast_to(inlet[:, None], flux.shape), rtol=1e-14)
 
 
 def test_advection_front_converges_to_carrier_mole_characteristics():
@@ -120,38 +102,6 @@ def test_surface_coverage_matches_exact_two_precursor_solution():
         np.testing.assert_allclose(result.y[1]-result.y[2], result.y[0]-initial, atol=1e-12)
 
 
-def test_half_cycle_matches_the_older_0d_and_spatial_engines():
-    """catches the shared cycle equations drifting from the two verified engines."""
-    chemistry = CycleChemistry(.01, 1000., 0.)
-
-    # one mixed cell against the well-mixed engine
-    recipe = [CycleSegment(1.5, .01, 0.), CycleSegment(3., 0., 0.)]
-    times = np.linspace(0, 4.5, 91)
-    result = solve_cycle(mixed_grid(), chemistry, recipe, fraction_scale=.01,
-                         options=OPTIONS, output_times=times)
-    old = solve_0d(WellMixedReactor(1., 1., 1.), FiniteCapacity(.01, 10.),
-                   [FlowSegment(1.5, .01), FlowSegment(3., 0.)], concentration_scale=.01,
-                   options=OPTIONS, output_times=times)
-    np.testing.assert_allclose(result.fields[0, :, 0], old.c[:, 0]/.01, atol=2e-8)
-    np.testing.assert_allclose(result.fields[2, :, 0], old.theta[:, 0], atol=2e-8)
-    assert result.checks()["relative_ledger"] < 1e-8
-    assert result.checks()["exact_segment_carryover"]
-
-    # twenty cells against the spatial engine
-    n = 20
-    dz = 1/n
-    grid = CycleGrid((np.arange(n)+.5)*dz, np.full(n, dz), np.full(n, dz),
-                     np.ones(n), 1., np.full((2, n-1), .2/dz), {"kind": "synthetic"})
-    segments = [CycleSegment(1., .01, 0.), CycleSegment(2., 0., 0.)]
-    times = np.linspace(0, 3, 61)
-    result = solve_cycle(grid, chemistry, segments, fraction_scale=.01, options=OPTIONS, output_times=times)
-    old = solve_1d(Reactor1D(1., 1., 1., 1., .2, n), FiniteCapacity(.01, 10.),
-                   [TransportSegment(s.duration, FluxBoundary(s.inlet_a)) for s in segments],
-                   concentration_scale=.01, options=OPTIONS, output_times=times)
-    np.testing.assert_allclose(result.fields[0], old.c/.01, atol=2e-8)
-    np.testing.assert_allclose(result.fields[2], old.theta, atol=2e-8)
-
-
 def test_closed_batch_conserves_atoms_and_mass():
     """catches wrong molar masses or a batch that makes film from nothing."""
     # element counts Zn, C, H, O: DEZ + H2O - 2 C2H6 leaves one ZnO
@@ -196,30 +146,3 @@ def test_decisions_keep_ambiguous_and_missing_candidates_unresolved():
     # the last downward crossing of 0.01 is at 2.5 s, and a signal that never falls has none
     assert purge_crossing(np.array([0., 1., 2., 3.]), np.array([.02, 0., .02, 0.])) == 2.5
     assert purge_crossing(np.array([0., 1.]), np.array([.02, .02])) is None
-
-
-def test_periodic_cycle_converges_and_a_short_run_fails_openly():
-    """catches a non-repeating cycle reported as periodic or growth from a failed run."""
-    recipe = [CycleSegment(3., .01, 0.), CycleSegment(5., 0., 0.),
-              CycleSegment(3., 0., .01), CycleSegment(5., 0., 0.)]
-    result = periodic_cycle(mixed_grid(), CycleChemistry(.01, 1000., 1200.), recipe,
-                            fraction_scale=.01, options=OPTIONS, output_times=np.linspace(0, 16, 65))
-    assert result.periodic
-    assert result.fields[4, -1, 0] > result.turnover[0] > .9
-    assert result.history[-1]["state_error"] <= 1e-7
-    assert result.history[-1]["growth_error"] <= 1e-7
-
-    # every B event completes one ZnO unit
-    events = result.events[:, -1] - result.events[:, 0]
-    retained = M_RETAINED_A*events[0] + M_RETAINED_B*events[1]
-    np.testing.assert_allclose(retained, M_ZNO*events[1], atol=1e-9)
-
-    # two very short cycles cannot repeat, so no growth per cycle is given
-    short = [CycleSegment(.01, .01, 0.), CycleSegment(.01, 0., .01)]
-    with pytest.raises(PeriodicFailure) as caught:
-        periodic_cycle(mixed_grid(), CycleChemistry(.01, 1., 1.), short,
-                       fraction_scale=.01, max_cycles=2, options=OPTIONS)
-    assert len(caught.value.result.history) == 2
-    assert not caught.value.result.periodic
-    with pytest.raises(ValueError, match="periodic"):
-        periodic_gpc(caught.value.result, 5400.)

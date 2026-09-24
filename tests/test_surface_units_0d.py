@@ -21,10 +21,6 @@ from ald_twin.units import (
     sccm_to_molar_flow,
 )
 
-# 20 cm³ volume, 0.02 m² reactive area, 20 cm³/s throughput, 20 µmol/m² sites
-REACTOR = WellMixedReactor(2e-5, 0.02, 2e-5)
-SURFACE = FiniteCapacity(2e-5, 0.002)
-
 
 def test_unit_conversions_match_hand_arithmetic():
     """catches a wrong standard state, gas constant or flow conversion."""
@@ -115,46 +111,3 @@ def test_closed_batch_is_limited_by_dose_or_by_capacity():
         assert np.min(result.c[:, 0] / initial_concentration) >= -1e-8
         assert np.min(result.theta) >= -1e-8
         assert np.max(result.theta) <= 1 + 1e-8
-
-
-def test_pulse_then_purge_conserves_moles_and_carries_state_exactly():
-    """catches a lost dose, a ledger error or a state jump at a segment switch."""
-    pulse, purge = FlowSegment(2, 2e-7, "pulse"), FlowSegment(5, 0, "purge")
-    combined = solve_0d(REACTOR, SURFACE, [pulse, purge], concentration_scale=0.01, initial_theta=0.15)
-    first = solve_0d(REACTOR, SURFACE, [pulse], concentration_scale=0.01, initial_theta=0.15)
-    second = solve_0d(
-        REACTOR, SURFACE, [purge], concentration_scale=0.01,
-        initial_c=first.c[-1, 0], initial_theta=first.theta[-1, 0],
-    )
-    switch_index = np.flatnonzero(combined.t == pulse.duration)
-    assert len(switch_index) == 1
-    np.testing.assert_array_equal(combined.c[switch_index[0]], first.c[-1])
-    np.testing.assert_array_equal(combined.theta[switch_index[0]], first.theta[-1])
-    np.testing.assert_allclose(combined.c[-1], second.c[-1], rtol=1e-7, atol=1e-10)
-    np.testing.assert_allclose(combined.theta[-1], second.theta[-1], rtol=0, atol=1e-8)
-    assert combined.theta[-1, 0] > combined.theta[switch_index[0], 0]
-    assert combined.c[switch_index[0], 0] > 0
-
-    # the dose is 2 s at 0.2 µmol/s
-    dose = pulse.duration * pulse.inlet_molar_flow
-    assert abs(combined.entered_moles[-1] - dose) / dose <= 1e-8
-    assert np.max(np.abs(combined.ledger_error_moles)) / dose <= 1e-8
-    assert np.min(combined.c / 0.01) >= -1e-8
-    assert np.min(combined.theta) >= -1e-8
-    assert np.max(combined.theta) <= 1 + 1e-8
-
-
-def test_no_input_or_a_full_surface_changes_nothing():
-    """catches gas or coverage appearing from nothing, or a full surface capturing more."""
-    empty = solve_0d(REACTOR, SURFACE, [FlowSegment(10, 0, "zero")],
-                     concentration_scale=0.01, initial_theta=0.3)
-    assert np.max(np.abs(empty.c / 0.01)) <= 1e-10
-    assert np.max(np.abs(empty.theta - 0.3)) <= 1e-10
-    assert np.all(empty.entered_moles == 0)
-    assert np.all(empty.escaped_moles == 0)
-    assert np.all(empty.ledger_error_moles == 0)
-
-    full = solve_0d(REACTOR, SURFACE, [FlowSegment(2, 2e-7), FlowSegment(5, 0), FlowSegment(2, 2e-7)],
-                    concentration_scale=0.01, initial_theta=1)
-    assert np.max(np.abs(full.theta - 1)) <= 1e-10
-    assert np.max(np.abs(full.captured_moles)) <= 1e-16

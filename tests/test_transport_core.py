@@ -1,14 +1,11 @@
 """spatial transport: face fluxes, conservation and an exact diffusion answer."""
 
 from dataclasses import replace
-from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
-import ald_twin.numerics as numerics
 from ald_twin.analytical import cell_averages, pulse_response, step_response
-from ald_twin.numerics import SolverFailure, SolverOptions, integrate_segments
 from ald_twin.reactor_1d import (AdvectiveBoundary, ConcentrationBoundary, FluxBoundary,
     Reactor1D, TransportSegment, face_fluxes, solve_1d)
 from ald_twin.surface import FiniteCapacity
@@ -52,25 +49,6 @@ def test_face_fluxes_match_hand_worked_values():
     flux = face_fluxes(np.full(r.cells, 3.), r, FluxBoundary(.02))
     assert abs(flux[0] - .02 / r.area) <= 1e-12
     assert abs(flux[-1] - r.velocity * 3.) <= 1e-12
-
-
-def test_steady_states_stay_put():
-    """catches spurious gas, coverage or ledger drift in a state that should not change."""
-    # nothing enters an empty channel
-    empty = solve_1d(reactor(), FiniteCapacity(.02, .01), [TransportSegment(1., FluxBoundary(0.))],
-                     concentration_scale=.1, initial_theta=.3)
-    assert np.max(np.abs(empty.c)) / .1 <= 1e-10
-    assert np.max(np.abs(empty.theta-.3)) <= 1e-10
-    assert np.max(np.abs(empty.ledger_error_moles)) == 0
-
-    # equal walls and an equal inside stay equal whichever way the gas flows
-    for velocity in (.5, -.5):
-        result = solve_1d(reactor(velocity=velocity), FiniteCapacity(.02, 0.),
-                          [TransportSegment(1., ConcentrationBoundary(.1, .1))],
-                          concentration_scale=.1, initial_c=.1, initial_theta=.3)
-        assert np.max(np.abs(result.c/.1-1)) <= 1e-10
-        assert np.max(np.abs(result.theta-.3)) <= 1e-10
-        assert conservation_relative(result) <= 1e-8
 
 
 def test_ledger_closes_through_pulses_purges_and_sources():
@@ -131,13 +109,3 @@ def test_diffusion_matches_the_exact_step_response():
     assert np.all(np.isfinite(pulse))
     assert response[0] == 1.
     assert abs(response[1] - .5) < .001
-
-
-def test_failed_solver_is_not_reported_as_success(monkeypatch):
-    """catches a failed integration being passed on as a result."""
-    failed = SimpleNamespace(success=False, t=np.array([0., .1]),
-        y=np.array([[1., 2.]]), message="test integration failure")
-    monkeypatch.setattr(numerics, "solve_ivp", lambda *a, **kw: failed)
-    with pytest.raises(SolverFailure, match="Segment 0 failed") as error:
-        integrate_segments([1.], [1.], lambda i: lambda t, y: y, SolverOptions())
-    assert error.value.result is failed

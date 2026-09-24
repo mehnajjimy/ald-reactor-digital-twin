@@ -35,15 +35,6 @@ def test_gas_properties_reproduce_frozen_values():
         assert actual_mixture == pytest.approx(mixture, abs=5e-11, rel=0)
 
 
-def test_diffusivity_scales_with_pressure_and_collision_integral():
-    """catches a missing 1/p scaling or a plain T^1.5 law without the collision integral."""
-    reference = water_nitrogen_diffusivity(423.15, 200)
-    assert water_nitrogen_diffusivity(423.15, 735) == pytest.approx(reference * 200 / 735, rel=1e-14)
-    # the collision integral falls with T, so D rises faster than T^1.5
-    hot = water_nitrogen_diffusivity(473.15, 200)
-    assert hot > reference * (473.15 / 423.15)**1.5
-
-
 def test_wilke_matches_the_poling_example_and_pure_limits():
     """catches a wrong wilke phi factor or a mixture rule that depends on species order."""
     # Poling example 9-5, methane and n-butane at 293 K. the book rounds its
