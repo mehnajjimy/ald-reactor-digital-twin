@@ -1,4 +1,4 @@
-"""A saved cycle may be reused only with its original grid and accounting."""
+"""a saved periodic cycle reloads exactly and can be continued."""
 
 import json
 from pathlib import Path
@@ -10,7 +10,8 @@ from ald_twin.cycle_study import case_parameters, channel_grid, recipe, study_op
 from ald_twin.cycles import periodic_cycle
 
 
-def test_saved_cycle_reloads_exactly_and_detects_changed_inventory(tmp_path, monkeypatch):
+def test_saved_cycle_reloads_exactly_and_rejects_changed_inventory(tmp_path, monkeypatch):
+    """catches a reload that drifts, loses the ledger origin or accepts edited arrays."""
     root = Path(__file__).resolve().parents[1]
     monkeypatch.syspath_prepend(str(root/"scripts"))
     from check_phase45_grid import load_result
@@ -25,12 +26,16 @@ def test_saved_cycle_reloads_exactly_and_detects_changed_inventory(tmp_path, mon
     np.testing.assert_array_equal(restored.integrated.y, original.integrated.y)
     np.testing.assert_array_equal(restored.initial_state, original.initial_state)
     assert restored.checks() == original.checks()
+
+    # continuing from the saved state keeps the original ledger origin and grows the film
     continued = periodic_cycle(restored.grid, chemistry, segments, fraction_scale=config["fraction_scale"],
                                options=study_options(segments), state=restored.integrated.y[:, -1],
                                accounting_origin=restored.initial_state)
     np.testing.assert_array_equal(continued.initial_state, original.initial_state)
     assert continued.checks()["relative_ledger"] < 1e-8
     assert continued.integrated.y[-4, -1] > restored.integrated.y[-4, -1]
+
+    # an edited carrier inventory no longer passes the reload checks
     with np.load(str(stem)+".npz") as raw:
         arrays = dict(raw)
     arrays["carrier_moles"] *= 2

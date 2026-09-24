@@ -8,7 +8,7 @@ and compares a simple well-mixed model with one that resolves the channel.
 
 Desktop tested only on Apple Silicon macOS. This build is not Apple-notarized.
 
-**245 Python tests · [CI verified](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D + spatial transport · Mac desktop + CLI**
+**66 Python tests · [CI verified](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D + spatial transport · Mac desktop + CLI**
 
 **The examples are synthetic. DEZ is still a placeholder, and the model has not
 yet been validated against experiments.**

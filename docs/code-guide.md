@@ -20,9 +20,10 @@ editing a covered file. Tests explain the failure they guard in their names;
 run Python checks with `python -m pytest -q` and interface race checks with
 `node --test tests/workspace.test.cjs` (Node 22).
 
-The original scientific modules are unchanged. Their equations, units and
-assumptions are described in [input-reference.md](input-reference.md). A passing
-calculation is still distinct from a feasible recipe and a valid physical model.
+The scientific modules keep their original equations and outputs. Their
+equations, units and assumptions are described in
+[input-reference.md](input-reference.md). A passing calculation is still
+distinct from a feasible recipe and a valid physical model.
 DEZ inputs remain synthetic placeholders.
 
 The [update and license guide](update-code-guide.md) explains the release checker,

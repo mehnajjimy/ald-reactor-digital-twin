@@ -1,9 +1,12 @@
+/* page background */
 html { background: #f4f5f6; }
 body { margin: 0; }
 
+/* workspace colours, font and frame */
 #reactor-workspace { --rx-blue:#5aa9d6; --rx-soft:#eaf5fc; --rx-ink:#25313b; --rx-muted:#62717d; --rx-line:#d6dce1; --rx-panel:#f4f5f6; --rx-pad:12px; color-scheme:light; font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--rx-ink); background:#fff; border:1px solid #cbd2d8; width:100%; }
 #reactor-workspace * { box-sizing:border-box; }
 #reactor-workspace [hidden] { display:none !important; }
+/* buttons and form fields */
 #reactor-workspace button,#reactor-workspace input,#reactor-workspace select { font:inherit; color:inherit; border-radius:2px; }
 #reactor-workspace button { cursor:pointer; border:1px solid var(--rx-line); background:#fff; padding:6px 10px; display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:30px; }
 #reactor-workspace button:hover { background:var(--rx-soft); }
@@ -11,15 +14,19 @@ body { margin: 0; }
 #reactor-workspace input,#reactor-workspace select { background:#fff; border:1px solid #bfc8cf; padding:5px 7px; min-width:0; }
 #reactor-workspace input[type=checkbox] { accent-color:#3583b2; width:15px; height:15px; }
 #reactor-workspace input[type=range] { accent-color:#3583b2; padding:0; width:110px; }
+/* header with logo and sound button */
 #reactor-workspace .rx-header { display:flex; align-items:center; gap:12px; padding:10px 14px; background:#f5f6f7; border-bottom:1px solid #cbd2d8; }
 #reactor-workspace .rx-logo { display:block; width:34px; height:34px; object-fit:contain; }
 #reactor-workspace .rx-name { font-weight:600; font-size:14px; }
 #reactor-workspace .rx-preview { color:var(--rx-muted); font-size:11px; margin-left:2px; }
 #reactor-workspace .rx-spacer { flex:1; }
+/* toolbar with open, save, stop and run */
 #reactor-workspace .rx-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:8px 12px; border-bottom:1px solid var(--rx-line); }
 #reactor-workspace .rx-path { color:var(--rx-muted); font-size:12px; }
 #reactor-workspace .rx-primary { background:#dceefb; border-color:#88b8d7; color:#245777; font-weight:600; }
+/* three columns: project, work area, recipe inspector */
 #reactor-workspace .rx-body { display:grid; grid-template-columns:171px minmax(0,1fr) 204px; }
+/* project sidebar: process buttons and reactor summary */
 #reactor-workspace .rx-explorer { background:var(--rx-panel); border-right:1px solid var(--rx-line); }
 #reactor-workspace .rx-panel-title { margin:0; padding:9px 12px; border-bottom:1px solid var(--rx-line); font-size:11px; text-transform:uppercase; letter-spacing:.7px; font-weight:600; }
 #reactor-workspace .rx-group-label { padding:17px 12px 6px; font-size:11px; color:var(--rx-muted); }
@@ -30,7 +37,9 @@ body { margin: 0; }
 #reactor-workspace .rx-properties dl { margin:0; display:grid; grid-template-columns:1fr auto; gap:9px 6px; font-size:12px; }
 #reactor-workspace dt { color:var(--rx-muted); }
 #reactor-workspace dd { margin:0; font-variant-numeric:tabular-nums; }
+/* small grey notes */
 #reactor-workspace .rx-note { color:var(--rx-muted); font-size:11px; margin:12px 0 0; line-height:1.6; }
+/* work area with results, inputs and compare tabs */
 #reactor-workspace .rx-work { min-width:0; background:white; }
 #reactor-workspace .rx-tabs { display:flex; border-bottom:1px solid var(--rx-line); background:#f8f9fa; }
 #reactor-workspace .rx-tab { border:0; border-right:1px solid var(--rx-line); border-radius:0; padding:10px 16px; color:#64717b; }
@@ -39,19 +48,23 @@ body { margin: 0; }
 #reactor-workspace .rx-heading-row { display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap; }
 #reactor-workspace h2 { font-size:14px; font-weight:600; margin:0; line-height:1.5; }
 #reactor-workspace .rx-meta { font-size:11px; color:var(--rx-muted); }
+/* turnover chart and its legend */
 #reactor-workspace .rx-legend { display:flex; gap:16px; font-size:11px; color:var(--rx-muted); margin-top:10px; }
 #reactor-workspace .rx-legend span { display:flex; align-items:center; gap:5px; }
 #reactor-workspace .rx-swatch { width:19px; border-top:2px solid var(--rx-blue); }
 #reactor-workspace .rx-swatch.rx-dashed { border-top:2px dashed #708391; }
 #reactor-workspace .rx-plot { display:block; width:100%; height:230px; margin-top:8px; }
 #reactor-workspace .rx-plot text { font:11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#62717d; }
+/* tables: labels left, numbers right */
 #reactor-workspace .rx-table-wrap { width:100%; overflow-x:auto; }
 #reactor-workspace table { border-collapse:collapse; width:100%; font-size:12px; margin-top:12px; }
 #reactor-workspace th { color:#586773; font-weight:500; background:#f5f7f8; }
 #reactor-workspace th,#reactor-workspace td { padding:8px 8px; border-bottom:1px solid #e4e8eb; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
 #reactor-workspace th:first-child,#reactor-workspace td:first-child { text-align:left; white-space:normal; }
+/* check colours: amber for review, green for pass */
 #reactor-workspace .rx-review { color:#986423; }
 #reactor-workspace .rx-pass { color:#3b715c; }
+/* recipe inspector: pulse and purge fields, sequence bar, checks */
 #reactor-workspace .rx-inspector { background:#fafbfc; border-left:1px solid var(--rx-line); }
 #reactor-workspace .rx-field { display:grid; grid-template-columns:minmax(0,1fr) 59px 13px; align-items:center; gap:6px; margin-bottom:10px; font-size:12px; }
 #reactor-workspace .rx-field input { width:100%; text-align:right; font-variant-numeric:tabular-nums; }
@@ -62,38 +75,74 @@ body { margin: 0; }
 #reactor-workspace .rx-checks { padding:10px 12px; border-top:1px solid var(--rx-line); font-size:12px; }
 #reactor-workspace .rx-checks div { display:flex; justify-content:space-between; gap:6px; margin:9px 0; }
 #reactor-workspace .rx-checks strong { font-weight:500; }
+/* status bar, progress bar, draft notice and errors */
 #reactor-workspace .rx-status { border-top:1px solid #cbd2d8; background:#f2f4f6; padding:7px 12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; font-size:11px; color:#596773; }
 #reactor-workspace .rx-progress { width:100%; height:3px; background:#e5ebef; }
 #reactor-workspace .rx-progress > div { height:100%; width:0; background:var(--rx-blue); transition:width .3s linear; }
 #reactor-workspace .rx-draft { background:#fff6e7; color:#805719; border-top:1px solid #e8d6b8; padding:9px 12px; font-size:11px; }
 #reactor-workspace .rx-error { color:#a03e38; font-size:11px; margin-top:10px; }
+/* inputs table wraps long values */
 #reactor-workspace .rx-inputs td { white-space:normal; overflow-wrap:anywhere; }
 #reactor-workspace .rx-inputs th { white-space:normal; }
 #reactor-workspace .rx-doc-line { font-size:12px; margin:8px 0 14px; color:var(--rx-muted); }
-@media(max-width:870px) { #reactor-workspace .rx-body { grid-template-columns:145px minmax(0,1fr); } #reactor-workspace .rx-inspector { grid-column:1/-1; border-left:0; border-top:1px solid var(--rx-line); display:grid; grid-template-columns:145px 1fr 1fr; } #reactor-workspace .rx-inspector .rx-panel-title { border-bottom:0; } #reactor-workspace .rx-checks { border-top:0; border-left:1px solid var(--rx-line); } }
-@media(max-width:540px) { #reactor-workspace .rx-header { padding:9px; gap:8px; flex-wrap:wrap; } #reactor-workspace .rx-preview { display:block; margin:0; } #reactor-workspace .rx-body { grid-template-columns:1fr; } #reactor-workspace .rx-explorer { border-right:0; border-bottom:1px solid var(--rx-line); } #reactor-workspace .rx-explorer .rx-panel-title,#reactor-workspace .rx-explorer .rx-group-label,#reactor-workspace .rx-explorer .rx-properties { display:none; } #reactor-workspace .rx-process { width:50%; float:left; min-height:61px; } #reactor-workspace .rx-view { padding:13px 10px; } #reactor-workspace .rx-inspector { display:block; } #reactor-workspace .rx-inspector .rx-properties { padding:12px; } #reactor-workspace .rx-checks { border-left:0; border-top:1px solid var(--rx-line); } #reactor-workspace .rx-field { grid-template-columns:1fr 90px 20px; } #reactor-workspace .rx-toolbar .rx-path { width:100%; } #reactor-workspace .rx-tab { flex:1; padding:9px 5px; } #reactor-workspace th,#reactor-workspace td { padding:7px 5px; font-size:11px; } }
-@media(pointer:coarse) { #reactor-workspace button,#reactor-workspace input,#reactor-workspace select { min-height:44px; } #reactor-workspace input,#reactor-workspace select { font-size:16px; } }
+/* medium screens: inspector moves below the work area */
+@media(max-width:870px) {
+  #reactor-workspace .rx-body { grid-template-columns:145px minmax(0,1fr); }
+  #reactor-workspace .rx-inspector { grid-column:1/-1; border-left:0; border-top:1px solid var(--rx-line); display:grid; grid-template-columns:145px 1fr 1fr; }
+  #reactor-workspace .rx-inspector .rx-panel-title { border-bottom:0; }
+  #reactor-workspace .rx-checks { border-top:0; border-left:1px solid var(--rx-line); }
+}
+/* phone screens: one column, compact header and tabs */
+@media(max-width:540px) {
+  #reactor-workspace .rx-header { padding:9px; gap:8px; flex-wrap:wrap; }
+  #reactor-workspace .rx-preview { display:block; margin:0; }
+  #reactor-workspace .rx-body { grid-template-columns:1fr; }
+  #reactor-workspace .rx-explorer { border-right:0; border-bottom:1px solid var(--rx-line); }
+  #reactor-workspace .rx-explorer .rx-panel-title,#reactor-workspace .rx-explorer .rx-group-label,#reactor-workspace .rx-explorer .rx-properties { display:none; }
+  #reactor-workspace .rx-process { width:50%; float:left; min-height:61px; }
+  #reactor-workspace .rx-view { padding:13px 10px; }
+  #reactor-workspace .rx-inspector { display:block; }
+  #reactor-workspace .rx-inspector .rx-properties { padding:12px; }
+  #reactor-workspace .rx-checks { border-left:0; border-top:1px solid var(--rx-line); }
+  #reactor-workspace .rx-field { grid-template-columns:1fr 90px 20px; }
+  #reactor-workspace .rx-toolbar .rx-path { width:100%; }
+  #reactor-workspace .rx-tab { flex:1; padding:9px 5px; }
+  #reactor-workspace th,#reactor-workspace td { padding:7px 5px; font-size:11px; }
+}
+/* touch screens: larger tap targets and 16px text so iOS does not zoom */
+@media(pointer:coarse) {
+  #reactor-workspace button,#reactor-workspace input,#reactor-workspace select { min-height:44px; }
+  #reactor-workspace input,#reactor-workspace select { font-size:16px; }
+}
+/* no width transition for reduced motion */
 @media(prefers-reduced-motion:reduce) { #reactor-workspace .rx-progress > div { transition:none; } }
+/* fill the window height */
 #reactor-workspace { min-height:100vh; }
 #reactor-workspace .rx-body { min-height:calc(100vh - 146px); }
+/* saved run and compare pickers */
 #reactor-workspace .rx-run-picker select { width:100%; margin-top:5px; font-size:11px; }
 #reactor-workspace .rx-compare-pickers { display:flex; gap:12px; margin-top:14px; }
 #reactor-workspace .rx-compare-pickers label { width:50%; min-width:0; color:var(--rx-muted); font-size:12px; }
 #reactor-workspace .rx-compare-pickers select { width:100%; display:block; margin-top:4px; }
+/* result origin line and validation panel */
 #reactor-workspace .rx-result-origin { margin-bottom:12px; overflow-wrap:anywhere; }
 #reactor-workspace .rx-validation { background:#fff4f2; color:#963c32; border-top:1px solid #e6c6bf; padding:10px 14px; }
 #reactor-workspace .rx-validation ul { margin:0; padding-left:18px; }
+/* collapsible sections and source notes */
 #reactor-workspace details { margin-top:18px; color:var(--rx-muted); font-size:12px; }
 #reactor-workspace summary { cursor:pointer; }
 #reactor-workspace .rx-sources h3 { font-size:12px; margin-bottom:4px; color:var(--rx-ink); }
 #reactor-workspace .rx-sources p { margin:4px 0; overflow-wrap:anywhere; }
+/* moving progress bar and the pressed sound button */
 #reactor-workspace .rx-progress > div { width:30%; animation:running 1.4s ease-in-out infinite alternate; }
 #reactor-workspace button[aria-pressed=true]#sound-toggle { background:var(--rx-soft); }
 @keyframes running { from { transform:translateX(0); } to { transform:translateX(230%); } }
+/* phone screens: no minimum height, pickers stack */
 @media(max-width:540px) {
   #reactor-workspace .rx-body { min-height:0; }
   #reactor-workspace .rx-explorer .rx-run-picker { display:block; clear:both; }
   #reactor-workspace .rx-compare-pickers { flex-direction:column; }
   #reactor-workspace .rx-compare-pickers label { width:100%; }
 }
+/* no moving bar for reduced motion: show a full bar instead */
 @media(prefers-reduced-motion:reduce) { #reactor-workspace .rx-progress > div { animation:none; width:100%; } }
