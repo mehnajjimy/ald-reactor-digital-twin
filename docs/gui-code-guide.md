@@ -6,15 +6,16 @@ described in their row. This keeps explanations outside the working code.
 Line numbers must follow later source edits.
 
 The server dispatches the shared solver and reads saved output. JavaScript
-changes presentation, never equations or acceptance thresholds. DEZ remains a
-synthetic placeholder; physical fitting stays blocked.
+changes presentation, never equations or acceptance thresholds. The synthetic
+ZnO example is a DEZ placeholder. The DEZ and water process uses labelled
+estimates. Physical fitting stays blocked for both.
 
 ## `src/ald_twin/gui.py`
 
 | Lines | What they do and why |
 |---|---|
 | 1–16 | Describe the local worker boundary and import UTC time, the standard HTTP server, JSON, media types, environment/filesystem tools, name matching, secure random tokens, signals, subprocesses, platform information, locking, URL parsing and browser launch. |
-| 18–22 | Reuse input inspection/preparation, packaged examples, atomic JSON writing, comparison and verified saved-result reading. Locate interface assets beside this module. |
+| 18–22 | Reuse the process kinds, input inspection/preparation, packaged examples, atomic JSON writing, comparison and verified saved-result reading. Locate interface assets beside this module. |
 | 24–41 | Name the allowed run-name pattern, the 512 KB body limit, the one-to-four comparison limit, the ten-second worker exit wait, the served asset list and the local-only content security policy. |
 | 44–49 | Read a JSON file and require an object. Reject other JSON types with a clear filename-specific error before callers use object fields. |
 | 52–59 | Construct the worker's argument list. A source installation uses the Python CLI; a frozen bundle uses its own `--worker` dispatcher. Both receive the same `simulate` command, input path and new output folder. |
@@ -22,12 +23,12 @@ synthetic placeholder; physical fitting stays blocked.
 | 74–84 | Define one workspace, resolve/create its run collection, and initialize its lock, worker reference, active-job record and closed flag. |
 | 86–93 | Accept only a short plain run name, resolve it beneath the collection and reject any path or symlink escaping that collection. Return the checked path. |
 | 95–109 | Inspect direct child directories, skipping hidden/non-directory entries. Read usable run metadata, note whether a manifest exists, skip malformed entries, and return newest first. The list is an index; opening a completed result verifies its files. |
-| 111–120 | Resolve a selected run and verify its manifest when present. Otherwise read its partial record. Reject saved records that claim unsupported scientific status. |
+| 111–120 | Resolve a selected run and verify its manifest when present. Otherwise read its partial record. Reject saved records that claim unsupported scientific status, including a kind other than synthetic or estimate. |
 | 121–125 | For a partial run, clear acceptance, feasibility and accepted-grid claims in the response. Keep running/interrupted/error states; downgrade other statuses to unverified. Return that record with its saved inputs without rewriting the original. |
 | 127–135 | Refresh an active job only after its worker exits. Locate the active run once exit is known. |
 | 137–145 | Verify a completed manifest before marking output ready. If verification fails, return an error record with the reason and leave readiness false. |
 | 147–158 | Read unfinished progress, or use an empty object if none was written. Preserve unreadable/malformed progress as `run-damaged.json` before constructing the exit record. |
-| 160–173 | Distinguish a requested stop from a worker error. Retain synthetic/blocked status and process identity, clear numerical acceptance, mark recipe feasibility unverified, and explain why execution ended. |
+| 160–173 | Distinguish a requested stop from a worker error. Retain the input's process kind, blocked physical fit and process identity, clear numerical acceptance, mark recipe feasibility unverified, and explain why execution ended. |
 | 174–178 | Create the partial output folder if needed, restore input provenance only when inputs are missing, save the exit record atomically, and update the active job to stopped and not ready. |
 | 180–188 | Lock status inspection, refresh any exited worker and return either no active job or the small set of live job flags used by the page. |
 | 190–202 | For a running job, include its submitted inputs and read its current progress. Missing progress means startup; unreadable progress produces a visible status message while preserving the ability to stop. For an exited job use the refreshed record. |
@@ -93,21 +94,21 @@ synthetic placeholder; physical fitting stays blocked.
 | 540–553 | In desktop mode request a native export and report errors. In a browser create a temporary download URL and link, trigger its download, then release the URL after one second. |
 | 555–567 | Capture the job counter, request live state, ignore an older job response, restore connected status and update activity/stage/Stop controls. Remember the current running job ID. |
 | 568–586 | Handle each observed completion once. Refresh saved runs, ignore completion continuation if the user changed selection or started another job, then open the finished output. Play completion only for ready artifacts of the same job. Report errors or disconnection, then schedule the next poll one second later. |
-| 588–601 | Choose each process button's title and its explicit synthetic/DEZ-placeholder subtitle. |
-| 603–617 | Construct one plain process button per packaged process. |
-| 618–634 | On process selection, invalidate old result requests, clear the displayed selection, validate the selected process and show its latest saved result without replacing the new draft. Ignore continuation after a newer selection. |
-| 636–642 | Restore native sound preference when applicable, label the toggle, fetch packaged processes, add their buttons and load saved runs. |
-| 644–661 | Load live state. Restore active-job inputs when running; otherwise choose the packaged ZnO example or first available process. Open matching saved output if available, retain error visibility, and begin polling. |
-| 663–683 | Remember the prior sound choice and disable the toggle while saving so requests cannot arrive out of order. Update its label, save the native preference when applicable, then the browser preference. Restore the prior choice and show an error if saving fails; always re-enable the toggle. Play the click or stop current audio according to the final choice. |
-| 685–689 | Wire the three view buttons to view selection and the optional click cue. |
-| 691–701 | Repair a missing/malformed recipe object, store the edited duration as a number or null, invalidate prior inspection and disable Run. Wait 180 ms after the latest edit before validating, avoiding a request for every keystroke. |
-| 703–716 | Wire saved-result selection and its errors, both comparison dropdowns and the Open inputs button's file chooser. |
-| 717–733 | Read one selected JSON file up to 512 KB, require an object, invalidate older selections, clear prior output and validate/show its inputs. Report parsing/data errors and clear the file control so the same file can be reopened. |
-| 735–738 | Export a formatted copy of the current inputs, including recipe edits. |
-| 740–751 | Capture the displayed run ID, fetch its verified report with the launch token, export that report under the captured run name and display any error. Changing selection while downloading cannot relabel the report. |
-| 753–773 | Invalidate old job/selection responses, lock controls during startup and clear old errors. Start the shared worker; retain its ID, select Results and show/play startup feedback. Always finish the startup state and invalidate earlier polls. |
-| 775–785 | Disable Stop during its request, show the retained-attempt message on success and restore the control if the request fails. |
-| 787–792 | Redraw when the chart changes size, then initialize the workspace with a visible startup error if loading fails. |
+| 588–603 | Choose each process button's title and subtitle. The subtitle is Estimated values for estimate processes, DEZ placeholder for the synthetic ZnO example and Synthetic otherwise. |
+| 605–619 | Construct one plain process button per packaged process. |
+| 620–636 | On process selection, invalidate old result requests, clear the displayed selection, validate the selected process and show its latest saved result without replacing the new draft. Ignore continuation after a newer selection. |
+| 638–644 | Restore native sound preference when applicable, label the toggle, fetch packaged processes, add their buttons and load saved runs. |
+| 646–663 | Load live state. Restore active-job inputs when running; otherwise choose the packaged synthetic ZnO example or first available process. Open matching saved output if available, retain error visibility, and begin polling. |
+| 665–685 | Remember the prior sound choice and disable the toggle while saving so requests cannot arrive out of order. Update its label, save the native preference when applicable, then the browser preference. Restore the prior choice and show an error if saving fails; always re-enable the toggle. Play the click or stop current audio according to the final choice. |
+| 687–691 | Wire the three view buttons to view selection and the optional click cue. |
+| 693–703 | Repair a missing/malformed recipe object, store the edited duration as a number or null, invalidate prior inspection and disable Run. Wait 180 ms after the latest edit before validating, avoiding a request for every keystroke. |
+| 705–718 | Wire saved-result selection and its errors, both comparison dropdowns and the Open inputs button's file chooser. |
+| 719–735 | Read one selected JSON file up to 512 KB, require an object, invalidate older selections, clear prior output and validate/show its inputs. Report parsing/data errors and clear the file control so the same file can be reopened. |
+| 737–740 | Export a formatted copy of the current inputs, including recipe edits. |
+| 742–753 | Capture the displayed run ID, fetch its verified report with the launch token, export that report under the captured run name and display any error. Changing selection while downloading cannot relabel the report. |
+| 755–775 | Invalidate old job/selection responses, lock controls during startup and clear old errors. Start the shared worker; retain its ID, select Results and show/play startup feedback. Always finish the startup state and invalidate earlier polls. |
+| 777–787 | Disable Stop during its request, show the retained-attempt message on success and restore the control if the request fails. |
+| 789–794 | Redraw when the chart changes size, then initialize the workspace with a visible startup error if loading fails. |
 
 ## `src/ald_twin/ui/index.html`
 
@@ -123,7 +124,7 @@ synthetic placeholder; physical fitting stays blocked.
 | 61–66 | Define the initially hidden Inputs view, Save inputs button, input/value/unit table and collapsed sources/model-scope disclosure. |
 | 67–74 | Define the initially hidden comparison view with two labeled choices, an empty-state prompt and table; close the main workspace. |
 | 75–78 | Open the Recipe inspector and its input container. |
-| 79–82 | Define A pulse, A purge, B pulse and B purge numeric fields with explicit accessible residence-time labels, nonnegative input bounds and unrestricted decimal steps. Python still performs the authoritative validation. |
+| 79–82 | Define A pulse, A purge, B pulse and B purge numeric fields with explicit accessible residence-time labels, input bounds from 0 to 10000 and unrestricted decimal steps. Python still performs the authoritative validation, including the tighter synthetic limit of 20. |
 | 83–85 | Add four decorative duration bars, their sequence labels and the calculated recipe-time text; close the recipe inputs. |
 | 86–88 | Show separate displayed-result numerical and recipe decisions plus the fixed blocked physical-fit status; close the inspector and body layout. |
 | 89–93 | Provide the initially hidden draft warning, accessible validation alerts, indeterminate activity bar and live status footer. The repeated model-scope tagline is removed. |

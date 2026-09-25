@@ -1,4 +1,4 @@
-"""explicit inputs for synthetic, one-to-one, two-half-cycle examples."""
+"""explicit inputs for synthetic or estimated, one-to-one, two-half-cycle processes."""
 
 from copy import deepcopy
 import json
@@ -21,7 +21,8 @@ UNITS = {"channel.length": "m", "channel.width": "m", "channel.height": "m",
          "recipe": "residence times"}
 PROVENANCE_SECTIONS = ("channel", "diffusivity", "chemistry", "recipe", "film")
 
-# allowed fields and fixed limits for the synthetic input path
+# allowed fields and fixed limits. synthetic processes test the numerics with
+# made-up values. estimate processes use published estimates and labelled assumptions.
 
 INPUT_FIELDS = {"schema_version", "id", "name", "kind", "physical_fit_ready", "model", "species",
                 "channel", "reactive_interval", "fraction_scale", "diffusivity", "chemistry",
@@ -30,13 +31,24 @@ DIFFUSIVITY_FIELDS = {"kind", "source", "source_type", "value", "temperature", "
 OBJECT_SECTIONS = ("channel", "diffusivity", "chemistry", "recipe")
 RECIPE_KEYS = {"a_pulse", "a_purge", "b_pulse", "b_purge"}
 SYNTHETIC_SOURCE = "synthetic_verification"
+PROCESS_KINDS = ("synthetic", "estimate")
+ESTIMATE_SOURCES = ("literature_estimate", "derived_estimate", "assumed")
 SUPPORTED_TEMPERATURE_K = 423.15
 MAX_FRACTION_SCALE = .01
 MAX_SEGMENT_RESIDENCE_TIMES = 20
+# estimates need long enough pulses to fill the surface. 10000 residence times is
+# about 11 s in the bundled channel and keeps a run to minutes
+MAX_ESTIMATE_SEGMENT_RESIDENCE_TIMES = 10000
 MIN_GRID_CELLS = 2
 MAX_GRID_CELLS = 2560
+# real diffusivities are small, so estimates need finer grids before upwind
+# numerical diffusion is small next to physical diffusion
+MAX_ESTIMATE_GRID_CELLS = 20480
 ZNO_FILM = {"mapping": "conditional-zno-150c", "density_kg_m3": 5400.0}
 ZNO_SPECIES = {"a": "DEZ-like synthetic A", "b": "Water-like synthetic B"}
+# estimated zno film: mapping name, and the species it may be used with
+ZNO_ESTIMATE_MAPPING = "zno-150c-estimate"
+DEZ_SPECIES = {"a": "DEZ", "b": "H2O"}
 
 
 # loading process files
@@ -90,22 +102,30 @@ def _valid_species(species):
     return True
 
 
-def _valid_provenance(source):
-    """true when a provenance entry names a synthetic source and its validity."""
+def _valid_provenance(source, kind):
+    """true when a provenance entry names its source and validity.
 
-    return (isinstance(source, dict)
-            and _is_text(source.get("source"))
-            and source.get("source_type") == SYNTHETIC_SOURCE
-            and _is_text(source.get("validity")))
+    synthetic entries must say so. estimate entries must say what kind of
+    estimate they are and give an uncertainty note.
+    """
+
+    if not isinstance(source, dict) or not _is_text(source.get("source")):
+        return False
+    if not _is_text(source.get("validity")):
+        return False
+    if kind == "estimate":
+        return (source.get("source_type") in ESTIMATE_SOURCES
+                and _is_text(source.get("uncertainty")))
+    return source.get("source_type") == SYNTHETIC_SOURCE
 
 
-def _valid_grids(grids):
+def _valid_grids(grids, ceiling):
     """true when grids is a list of at least two cell counts that double each time."""
 
     if not isinstance(grids, list) or len(grids) < 2:
         return False
     for cells in grids:
-        if type(cells) is not int or cells < MIN_GRID_CELLS or cells > MAX_GRID_CELLS:
+        if type(cells) is not int or cells < MIN_GRID_CELLS or cells > ceiling:
             return False
     for smaller, larger in zip(grids, grids[1:]):
         if larger != 2*smaller:
@@ -149,11 +169,17 @@ def _check_recipe_and_grids(data):
     recipe = data["recipe"]
     if set(recipe) != RECIPE_KEYS:
         raise ValueError("recipe requires a_pulse, a_purge, b_pulse, b_purge")
+    if data.get("kind") == "estimate":
+        limit = MAX_ESTIMATE_SEGMENT_RESIDENCE_TIMES
+        ceiling = MAX_ESTIMATE_GRID_CELLS
+    else:
+        limit = MAX_SEGMENT_RESIDENCE_TIMES
+        ceiling = MAX_GRID_CELLS
     for name, value in recipe.items():
-        if _positive(value, f"recipe.{name}") > MAX_SEGMENT_RESIDENCE_TIMES:
-            raise ValueError("Each segment is bounded at 20 residence times")
-    if not _valid_grids(data["spatial_grids"]):
-        raise ValueError("spatial_grids must double, with at least two grids and ceiling 2560")
+        if _positive(value, f"recipe.{name}") > limit:
+            raise ValueError(f"Each segment is bounded at {limit} residence times")
+    if not _valid_grids(data["spatial_grids"], ceiling):
+        raise ValueError(f"spatial_grids must double, with at least two grids and ceiling {ceiling}")
 
 
 # full input check
@@ -194,18 +220,23 @@ def input_issues(data):
         issues.append("reactive_interval is required; no reactive-area default is selected")
     if type(data.get("schema_version")) is not int or data["schema_version"] != 1:
         issues.append("schema_version must be the integer 1")
+    kind = data.get("kind")
     for name, prop in diffusivity.items():
         if set(prop) - DIFFUSIVITY_FIELDS:
             issues.append(f"Unknown diffusivity.{name} fields: {_unknown_keys(prop, DIFFUSIVITY_FIELDS)}")
         if not _is_text(prop.get("source")):
             issues.append(f"diffusivity.{name}.source must be a nonempty description")
-        if prop.get("source_type") != SYNTHETIC_SOURCE:
+        if kind == "estimate":
+            if prop.get("source_type") not in ESTIMATE_SOURCES or not _is_text(prop.get("uncertainty")):
+                issues.append(f"diffusivity.{name} needs an estimate source_type and an uncertainty note")
+        elif prop.get("source_type") != SYNTHETIC_SOURCE:
             issues.append(f"diffusivity.{name}.source_type must be synthetic_verification")
     for key in ("id", "name"):
         if not _is_text(data.get(key)):
             issues.append(f"{key} is required")
-    if data.get("kind") != "synthetic" or data.get("physical_fit_ready") is not False:
-        issues.append("Physical runs remain blocked; kind must be synthetic and physical_fit_ready false")
+    if kind not in PROCESS_KINDS or data.get("physical_fit_ready") is not False:
+        issues.append("Fitted physical runs remain blocked; kind must be synthetic or estimate "
+                      "and physical_fit_ready false")
     if data.get("model") != "two-event-nu1":
         issues.append("Only the existing two-event-nu1 equations are supported")
     species = data.get("species", {})
@@ -218,8 +249,11 @@ def input_issues(data):
         source = {}
         if isinstance(provenance, dict):
             source = provenance.get(section, {})
-        if not _valid_provenance(source):
-            issues.append(f"provenance.{section} needs a synthetic source and explicit validity")
+        if not _valid_provenance(source, kind):
+            if kind == "estimate":
+                issues.append(f"provenance.{section} needs an estimate source, validity and uncertainty")
+            else:
+                issues.append(f"provenance.{section} needs a synthetic source and explicit validity")
 
     # physical and numerical inputs are checked by building them
 
@@ -232,15 +266,36 @@ def input_issues(data):
     except (KeyError, TypeError, ValueError) as error:
         issues.append(f"Required recipe/numerical input: {error}")
 
-    # the zno film mapping only belongs to the synthetic-zno example
+    # a zno film mapping needs zno species: the synthetic-zno example, or DEZ and water estimates
 
     if "film" not in data:
         issues.append("film is required; use null when no supported thickness mapping exists")
-    elif data["film"] is not None and data["film"] != ZNO_FILM:
-        issues.append("Only the fixed conditional ZnO mapping is supported; otherwise film must be null")
-    if data.get("film") is not None and (data.get("id") != "synthetic-zno" or species != ZNO_SPECIES):
-        issues.append("The ZnO mapping cannot be transferred to another process")
+    elif kind == "estimate":
+        _add_estimate_film_issues(data["film"], species, issues)
+    else:
+        if data["film"] is not None and data["film"] != ZNO_FILM:
+            issues.append("Only the fixed conditional ZnO mapping is supported; otherwise film must be null")
+        if data["film"] is not None and (data.get("id") != "synthetic-zno" or species != ZNO_SPECIES):
+            issues.append("The ZnO mapping cannot be transferred to another process")
     return issues
+
+
+def _add_estimate_film_issues(film, species, issues):
+    """add issues for an estimated film: null, or zno from DEZ and water with a density."""
+
+    if film is None:
+        return
+    if not isinstance(film, dict) or set(film) != {"mapping", "density_kg_m3"}:
+        issues.append("An estimated film needs exactly mapping and density_kg_m3")
+        return
+    if film["mapping"] != ZNO_ESTIMATE_MAPPING:
+        issues.append(f"The only estimated film mapping is {ZNO_ESTIMATE_MAPPING}")
+    if species != DEZ_SPECIES:
+        issues.append("The estimated ZnO mapping needs species a DEZ and b H2O")
+    try:
+        _positive(film["density_kg_m3"], "film.density_kg_m3")
+    except (TypeError, ValueError) as error:
+        issues.append(str(error))
 
 
 # turning checked inputs into a runnable recipe
@@ -282,7 +337,9 @@ def inspect_process(data):
                           mean_velocity_m_s=velocity.tolist(),
                           segment_duration_s=durations,
                           precursor_moles=precursor)
-    if data["film"]:
+    if data["film"] and data["kind"] == "estimate":
+        report["film_status"] = "Estimated ZnO from published values and assumptions"
+    elif data["film"]:
         report["film_status"] = "Conditional synthetic ZnO equivalent"
     else:
         report["film_status"] = "Unavailable; surface turnover only"

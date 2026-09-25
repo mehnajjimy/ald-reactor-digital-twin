@@ -15,7 +15,7 @@ from threading import RLock
 from urllib.parse import urlsplit
 import webbrowser
 
-from .process_inputs import inspect_process, prepare_inputs, process_catalog
+from .process_inputs import PROCESS_KINDS, inspect_process, prepare_inputs, process_catalog
 from .process_study import write_json
 from .workflow import compare_runs, read_run
 
@@ -116,7 +116,7 @@ class Workspace:
             record = read_run(folder)
         else:
             record = read_json(folder/"run.json")
-        if record.get("kind") != "synthetic" or record.get("physical_fit_ready") is not False:
+        if record.get("kind") not in PROCESS_KINDS or record.get("physical_fit_ready") is not False:
             raise ValueError("Unsupported saved scientific status")
         if not ready:
             record.update(numerical_acceptance=False, recipe_feasibility="unverified", accepted_cells=None)
@@ -167,7 +167,7 @@ class Workspace:
             status = "ERROR"
             stage = "Calculation stopped after an error"
             reason = record.get("reason", "Worker exited before completing the saved result")
-        record.update(kind="synthetic", physical_fit_ready=False,
+        record.update(kind=self.active["inputs"]["kind"], physical_fit_ready=False,
             process_id=self.active["inputs"]["id"], process_name=self.active["inputs"]["name"],
             status=status, numerical_acceptance=False,
             recipe_feasibility="unverified", stage=stage, reason=reason)

@@ -589,6 +589,7 @@ async function poll() {
 
 // sidebar title for a process button
 function processTitle(processInputs) {
+  if (processInputs.id === 'dez-water-zno') return 'ZnO from DEZ';
   if (processInputs.id === 'synthetic-zno') return 'ZnO equivalent';
   if (processInputs.id === 'synthetic-ab') return 'Fictional A / B';
   return processInputs.name;
@@ -596,6 +597,7 @@ function processTitle(processInputs) {
 
 // sidebar subtitle for a process button
 function processDetail(processInputs) {
+  if (processInputs.kind === 'estimate') return 'Estimated values';
   if (processInputs.id === 'synthetic-zno') return 'DEZ placeholder';
   return 'Synthetic';
 }

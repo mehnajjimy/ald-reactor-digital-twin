@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "dez-water-zno",
+  "name": "ZnO from DEZ and water at 150 C (estimates)",
+  "kind": "estimate",
+  "physical_fit_ready": false,
+  "model": "two-event-nu1",
+  "species": {
+    "a": "DEZ",
+    "b": "H2O"
+  },
+  "channel": {
+    "length": 0.05,
+    "width": 0.05,
+    "height": 0.002,
+    "temperature": 423.15,
+    "outlet_pressure": 200.0,
+    "molar_flow": 0.00037,
+    "viscosity": 2.3e-05
+  },
+  "reactive_interval": [
+    0,
+    0.05
+  ],
+  "fraction_scale": 0.01,
+  "diffusivity": {
+    "a": {
+      "kind": "estimate",
+      "source": "Chapman-Enskog (gas_properties.dez_nitrogen_diffusivity) with DEZ sigma 5.86 A and epsilon/k 405 K from Zhuang et al. 2021, AIChE J, doi:10.1002/aic.17305, supporting Table S2, and N2 from Poling 5e Appendix B",
+      "value": 0.007333033471451941,
+      "temperature": 423.15,
+      "pressure": 200.0,
+      "source_type": "derived_estimate",
+      "uncertainty": "Not quantified. Zhuang estimated the DEZ values from Poling and Jackson 1992, they were not measured. Using Zhuang's N2 values instead lowers D by 1.3 percent."
+    },
+    "b": {
+      "kind": "estimate",
+      "source": "Chapman-Enskog (gas_properties.water_nitrogen_diffusivity) with water and N2 from Poling 5e Appendix B",
+      "value": 0.021180209975329035,
+      "temperature": 423.15,
+      "pressure": 200.0,
+      "source_type": "derived_estimate",
+      "uncertainty": "Not quantified. A spherical Lennard-Jones model does not correct for water polarity."
+    }
+  },
+  "chemistry": {
+    "capacity": 1.0959557843347388e-05,
+    "rate_a": 61438.52574806081,
+    "rate_b": 16086.596352747434
+  },
+  "recipe": {
+    "a_pulse": 450.0,
+    "a_purge": 900.0,
+    "b_pulse": 450.0,
+    "b_purge": 900.0
+  },
+  "film": {
+    "mapping": "zno-150c-estimate",
+    "density_kg_m3": 5300.0
+  },
+  "spatial_grids": [
+    2560,
+    5120,
+    10240,
+    20480
+  ],
+  "units": {
+    "channel.length": "m",
+    "channel.width": "m",
+    "channel.height": "m",
+    "channel.temperature": "K",
+    "channel.outlet_pressure": "Pa",
+    "channel.molar_flow": "mol/s",
+    "channel.viscosity": "Pa s",
+    "reactive_interval": "m",
+    "diffusivity": "m2/s at reference K and Pa",
+    "chemistry.capacity": "mol/m2",
+    "chemistry.rate_a": "m3/(mol s)",
+    "chemistry.rate_b": "m3/(mol s)",
+    "fraction_scale": "1",
+    "recipe": "residence times"
+  },
+  "provenance": {
+    "channel": {
+      "source_type": "assumed",
+      "source": "The bundled 5 cm by 5 cm channel with a 2 mm gap, 200 Pa outlet and about 500 sccm N2, reused from the synthetic examples. It is not the GemStar geometry.",
+      "validity": "150 C only. Reactor geometry, flow and pressure are not the lab reactor's.",
+      "uncertainty": "Not a measured reactor. Results show trends for this channel, not the GemStar."
+    },
+    "diffusivity": {
+      "source_type": "derived_estimate",
+      "source": "Chapman-Enskog with Lennard-Jones inputs, see diffusivity.a and diffusivity.b.",
+      "validity": "423.15 K, scaled as 1/p along the channel.",
+      "uncertainty": "Not quantified. The DEZ collision inputs are published estimates."
+    },
+    "chemistry": {
+      "source_type": "assumed",
+      "source": "capacity: 6.6 Zn per nm2 per cycle at 150 C, Gonsalves et al. 2026, arXiv:2609.12460, Table 1 p.10 (preprint). rate_a and rate_b: k = beta * sqrt(8RT/(pi M)) / (4 capacity) with assumed sticking probabilities beta 1e-2 for DEZ and 1e-3 for water. No published beta for DEZ on ZnO or water on the ethyl surface was found.",
+      "validity": "150 C, one site population, one-to-one events, no desorption.",
+      "uncertainty": "Capacity: Cai et al. 2019 QCM mass (126 ng/cm2 per cycle) implies about 9.3 Zn per nm2, so the spread is at least 40 percent. The sticking probabilities are guesses and could be off by ten times or more."
+    },
+    "recipe": {
+      "source_type": "assumed",
+      "source": "Pulses of 450 and purges of 900 residence times, about 0.5 s and 1.0 s in this channel, chosen so an assumed-beta surface can fill and the gas can clear.",
+      "validity": "This channel only.",
+      "uncertainty": "Not a lab recipe. The GemStar uses 30 ms to 2 s pulses and 28 to 90 s purges in a different reactor."
+    },
+    "film": {
+      "source_type": "literature_estimate",
+      "source": "ZnO film density 5300 kg/m3 by XRR at 150 C, Gonsalves et al. 2026, arXiv:2609.12460, Table 1 (preprint). Bulk ZnO is 5610 kg/m3.",
+      "validity": "150 C films only.",
+      "uncertainty": "Elam et al. 2003 (doi:10.1149/1.1569481, Table I) give 5620 kg/m3 at 177 C. The density moves GPC by about 6 percent."
+    }
+  }
+}

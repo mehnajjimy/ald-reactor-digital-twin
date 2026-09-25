@@ -3,8 +3,8 @@
 these replace Holmqvist's exact property inputs, they are not copies of them.
 public arguments and results use SI. Poling 5e supplies the Chapman-Enskog,
 Neufeld and Wilke expressions and Appendix B supplies the Svehla collision
-inputs. see docs/phase3-property-audit.md. no DEZ transport property is
-inferred here.
+inputs. see docs/phase3-property-audit.md. the DEZ collision inputs are
+published estimates, not measurements, so DEZ-N2 diffusivity is an estimate too.
 """
 
 import math
@@ -18,6 +18,12 @@ N2_SIGMA = 3.798e-10  # m
 H2O_SIGMA = 2.641e-10  # m
 N2_EPSILON_OVER_K = 71.4  # K
 H2O_EPSILON_OVER_K = 809.1  # K
+
+# DEZ, Zn(C2H5)2: molar mass from atomic masses, collision inputs estimated in
+# Zhuang et al. 2021, AIChE J, doi:10.1002/aic.17305, supporting Table S2
+DEZ_MOLAR_MASS = 0.123504  # kg/mol
+DEZ_SIGMA = 5.86e-10  # m
+DEZ_EPSILON_OVER_K = 405.0  # K
 
 # unit conversions between SI and the units the Poling formulas expect
 _PA_PER_BAR = 1e5
@@ -39,18 +45,21 @@ def _reduced_temperature(temperature: float, epsilon_over_k: float) -> float:
     return reduced
 
 
-def water_nitrogen_diffusivity(temperature: float, pressure: float) -> float:
-    """binary H2O-N2 diffusivity [m²/s] at T [K] and local pressure [Pa].
+def _chapman_enskog_diffusivity(temperature, pressure, molar_masses, sigmas, epsilons_over_k):
+    """binary diffusivity [m²/s] of a Lennard-Jones pair at T [K] and pressure [Pa].
 
     Poling Eqs. 11-3.2 and 11-3.4 to 11-3.6, with first-order correction f_D=1.
-    the spherical Lennard-Jones approximation does not correct water polarity.
+    each pair argument holds the two species' values in SI.
     """
     temperature = _positive(temperature, "temperature [K]")
     pressure_bar = _positive(pressure, "pressure [Pa]") / _PA_PER_BAR
+    first_mass, second_mass = molar_masses
+    first_sigma, second_sigma = sigmas
+    first_epsilon, second_epsilon = epsilons_over_k
 
-    # combining rules for the H2O-N2 pair
-    sigma_angstrom = (H2O_SIGMA + N2_SIGMA) / 2 / _M_PER_ANGSTROM
-    epsilon_over_k = math.sqrt(H2O_EPSILON_OVER_K * N2_EPSILON_OVER_K)
+    # combining rules for the pair
+    sigma_angstrom = (first_sigma + second_sigma) / 2 / _M_PER_ANGSTROM
+    epsilon_over_k = math.sqrt(first_epsilon * second_epsilon)
     reduced = _reduced_temperature(temperature, epsilon_over_k)
 
     # Neufeld fit for the diffusion collision integral
@@ -62,11 +71,34 @@ def water_nitrogen_diffusivity(temperature: float, pressure: float) -> float:
     )
 
     # Chapman-Enskog in g/mol, bar and angstrom, giving cm²/s, then back to m²/s
-    mass_g_per_mol = _G_PER_KG * 2 / (1 / H2O_MOLAR_MASS + 1 / N2_MOLAR_MASS)
+    mass_g_per_mol = _G_PER_KG * 2 / (1 / first_mass + 1 / second_mass)
     diffusion_cm2_per_s = 0.00266 * temperature**1.5 / (
         pressure_bar * math.sqrt(mass_g_per_mol) * sigma_angstrom**2 * omega
     )
     return diffusion_cm2_per_s * _M2_PER_CM2
+
+
+def water_nitrogen_diffusivity(temperature: float, pressure: float) -> float:
+    """binary H2O-N2 diffusivity [m²/s] at T [K] and local pressure [Pa].
+
+    the spherical Lennard-Jones approximation does not correct water polarity.
+    """
+    return _chapman_enskog_diffusivity(temperature, pressure,
+                                       (H2O_MOLAR_MASS, N2_MOLAR_MASS),
+                                       (H2O_SIGMA, N2_SIGMA),
+                                       (H2O_EPSILON_OVER_K, N2_EPSILON_OVER_K))
+
+
+def dez_nitrogen_diffusivity(temperature: float, pressure: float) -> float:
+    """estimated binary DEZ-N2 diffusivity [m²/s] at T [K] and local pressure [Pa].
+
+    the DEZ collision inputs are estimates, and a nonspherical molecule is
+    treated as a Lennard-Jones sphere, so this is not a measured value.
+    """
+    return _chapman_enskog_diffusivity(temperature, pressure,
+                                       (DEZ_MOLAR_MASS, N2_MOLAR_MASS),
+                                       (DEZ_SIGMA, N2_SIGMA),
+                                       (DEZ_EPSILON_OVER_K, N2_EPSILON_OVER_K))
 
 
 def _gas_viscosity(

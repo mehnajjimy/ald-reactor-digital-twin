@@ -38,12 +38,12 @@ def build_parser():
     gui.add_argument("--no-browser", action="store_true")
 
     # read-only views of the packaged examples
-    commands.add_parser("processes", help="List the packaged synthetic examples without calculating")
+    commands.add_parser("processes", help="List the packaged processes without calculating")
     inspect = commands.add_parser("inspect", help="Inspect required inputs, units and missing values")
     inspect.add_argument("process", help="Packaged process ID or a JSON input file")
 
     # one explicit simulation, with optional segment overrides
-    simulate = commands.add_parser("simulate", help="Verify one synthetic recipe using explicit SI inputs")
+    simulate = commands.add_parser("simulate", help="Verify one recipe using explicit SI inputs")
     simulate.add_argument("process", help="Packaged process ID or a JSON input file")
     simulate.add_argument("--output", type=Path, required=True)
     for segment in SEGMENT_FLAGS:
@@ -75,10 +75,10 @@ def build_parser():
 
 
 def list_processes():
-    """print the packaged synthetic examples."""
+    """print the packaged processes with their kind, synthetic or estimate."""
     from .process_inputs import process_catalog
     for process in process_catalog():
-        print(f"{process['id']}: {process['name']} [synthetic]")
+        print(f"{process['id']}: {process['name']} [{process['kind']}]")
 
 
 def inspect_command(args):

@@ -6,15 +6,16 @@ issues and derived flow before calculating. Packaged inputs live in
 pass that filename to `inspect` or `simulate`. Each run saves its validated inputs,
 including recipe overrides, as `inputs.json`; the original file is not edited.
 
-DEZ property work is continuing separately. The DEZ-like inputs shipped here are
-synthetic placeholders. Replacing them with accepted properties later requires
-new provenance and verification of the affected calculations; editing a number
-does not by itself establish a physical result.
+There are two kinds of process. `synthetic` processes use made-up values to test
+the numerics. `estimate` processes use published estimates and labelled
+assumptions, and every section must say where its numbers came from and how
+uncertain they are. `dez-water-zno` is the only estimate process so far. Neither
+kind is fitted or validated against measurements.
 
 ## What this model describes
 
-Only synthetic `two-event-nu1` inputs at **423.15 K (150 °C)** are admitted by the
-new workflow. Both examples use the existing effective one-to-one event loop:
+Only `two-event-nu1` inputs at **423.15 K (150 °C)** are admitted by the
+workflow. Every process uses the same effective one-to-one event loop:
 
 ```text
 rA = Gamma * kA * cA * (1 - theta)
@@ -33,7 +34,7 @@ or film property follows merely from renaming A and B.
 |---|---|---|
 | `schema_version` | — | Exactly 1 |
 | `id`, `name`, `species.a`, `species.b` | text | Explicit process and species labels |
-| `kind`, `physical_fit_ready` | — | Exactly `synthetic`, `false` |
+| `kind`, `physical_fit_ready` | — | `synthetic` or `estimate`, and `false` |
 | `model` | — | Exactly `two-event-nu1` |
 | `channel.length`, `width`, `height` | m | Positive dimensions; height is the full plate gap |
 | `channel.temperature` | K | Exactly 423.15 in this workflow |
@@ -42,14 +43,14 @@ or film property follows merely from renaming A and B.
 | `channel.viscosity` | Pa s | Positive constant carrier viscosity, explicitly synthetic here |
 | `reactive_interval` | m | `[start, end]` within channel length; two facing reactive plates |
 | `fraction_scale` | 1 | Positive inlet trace fraction and state scale, at most 0.01 here |
-| `diffusivity.a`, `.b` | object | Each requires synthetic `kind`, nonempty text `source`, `source_type: synthetic_verification`, positive `value` (m²/s), `temperature` (K), `pressure` (Pa); optional `uncertainty` is retained as metadata |
+| `diffusivity.a`, `.b` | object | Each requires a `kind` matching the process, nonempty text `source`, positive `value` (m²/s), `temperature` (K), `pressure` (Pa). Synthetic: `source_type: synthetic_verification`, optional `uncertainty`. Estimate: `source_type` of `literature_estimate`, `derived_estimate` or `assumed`, and an `uncertainty` note |
 | `chemistry.capacity` | mol/m² | Positive effective capacity Gamma |
 | `chemistry.rate_a`, `.rate_b` | m³/(mol s) | Positive constant effective rates; no temperature extrapolation |
-| `recipe.a_pulse`, `.a_purge`, `.b_pulse`, `.b_purge` | residence times | Four positive durations, each at most 20; order is fixed |
-| `spatial_grids` | cell counts | At least two integer grids, each doubles; ceiling 2560 |
+| `recipe.a_pulse`, `.a_purge`, `.b_pulse`, `.b_purge` | residence times | Four positive durations, each at most 20 (synthetic) or 10000 (estimate); order is fixed |
+| `spatial_grids` | cell counts | At least two integer grids, each doubles; ceiling 2560 (synthetic) or 20480 (estimate) |
 | `film` | object or null | Null means no thickness output; see below |
 | `units` | field/unit map | Must exactly match `process_inputs.UNITS`; no automatic unit conversion |
-| `provenance` | section records | Channel, transport, chemistry, recipe and film each need source, `synthetic_verification` type and explicit validity |
+| `provenance` | section records | Channel, transport, chemistry, recipe and film each need source and explicit validity. Synthetic: `synthetic_verification` type. Estimate: an estimate type and an `uncertainty` note |
 
 Both species enter at `channel.molar_flow * fraction_scale` during their own
 pulse. Purges have zero precursor inlet while carrier flow continues. Unequal
@@ -104,7 +105,7 @@ reference K and Pa using `units.sccm_to_molar_flow`; no sccm convention is guess
 | Purge clearance | Last downward continuous crossing of residual 0.01 within each purge; s from purge start; null = uncleared, zero = already clear |
 | Consumption, escape fractions | Event-consumed or escaped precursor moles / inlet precursor moles, for each species |
 | Cycle time, dose | Sum of four durations (s); integrated inlet A+B (mol) |
-| Equivalent ZnO GPC | `1e10*M_ZNO*Gamma*turnover/5400`, Å/cycle; restricted conditional mapping below |
+| Equivalent ZnO GPC | `1e10*M_ZNO*Gamma*turnover/density`, Å/cycle; restricted mappings below |
 
 Only `synthetic-zno` can request the following `film` value with its declared
 species labels:
@@ -117,6 +118,25 @@ This is the existing
 150 °C equivalent-growth output. It is not a real-process validation. The
 fictional A/B fixture sets `film: null`; no density, molecular mass, film thickness,
 QCM signal or retained fragment is invented for it.
+
+An estimate process with species `DEZ` and `H2O` can instead use
+`{"mapping": "zno-150c-estimate", "density_kg_m3": <positive>}`. `dez-water-zno`
+uses 5300 kg/m³, the XRR density reported at 150 °C.
+
+## The DEZ and water estimates
+
+| Input | Value | Where it comes from |
+|---|---|---|
+| DEZ-N2 diffusivity | 0.00733 m²/s at 423.15 K, 200 Pa | Chapman-Enskog with DEZ σ 5.86 Å and ε/k 405 K (Zhuang 2021, supporting Table S2, themselves estimates) |
+| Water-N2 diffusivity | 0.0212 m²/s at 423.15 K, 200 Pa | The same formula with Poling's water and N2 values |
+| Capacity Gamma | 1.096e-5 mol/m² (6.6 Zn per nm² per cycle) | Gonsalves 2026, Table 1, 150 °C (preprint). Cai 2019 QCM implies about 9.3 per nm² |
+| rate_a, rate_b | from sticking probability β | `k = β * sqrt(8RT/(πM)) / (4 Gamma)` with **assumed** β = 1e-2 for DEZ and 1e-3 for water. No published value was found |
+| Film density | 5300 kg/m³ | Gonsalves 2026, Table 1 (XRR, 150 °C) |
+| Channel, dose, recipe | the synthetic channel, 0.01 trace fraction, 450/900/450/900 residence times | Assumed. This is not the GemStar |
+
+A fully filled surface gives 1.68 Å per cycle, close to the 1.65 Å reported at
+150 °C. The sticking probabilities decide how long a pulse takes to fill the
+surface, so treat pulse-time conclusions as guesses until β is measured or fitted.
 
 ## Missing inputs and acceptance
 

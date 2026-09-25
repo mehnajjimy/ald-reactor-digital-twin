@@ -13,7 +13,7 @@ from .cycle_study import (decision, metrics, metric_difference, readout_times,
                           resolution_difference, study_options, wall_screen)
 from .cycle_transport import channel_grid
 from .cycles import PeriodicFailure, periodic_cycle, periodic_gpc
-from .process_inputs import prepare_inputs
+from .process_inputs import PROCESS_KINDS, prepare_inputs
 from .process_runner import digest
 from .process_study import (converged, largest_change, numerical_error, recipe_objectives,
                             write_json)
@@ -54,7 +54,10 @@ def output_metrics(result, segments, film):
     if film is not None:
         gpc = periodic_gpc(result, film["density_kg_m3"])[active]
         summary["mean_gpc_angstrom"] = float(np.average(gpc, weights=result.grid.reactive_areas[active]))
-        summary["film_status"] = "Conditional synthetic ZnO equivalent at 150 C"
+        if result.grid.metadata["kind"] == "estimate":
+            summary["film_status"] = "Estimated ZnO at 150 C from published values and assumptions"
+        else:
+            summary["film_status"] = "Conditional synthetic ZnO equivalent at 150 C"
     return summary
 
 
@@ -110,7 +113,7 @@ def run_process(data, output, *, progress=None):
     source_hashes = {}
     for path in sources.iterdir():
         source_hashes[path.name] = digest(path)
-    record = dict(schema_version=1, kind="synthetic", physical_fit_ready=False,
+    record = dict(schema_version=1, kind=parameters["kind"], physical_fit_ready=False,
                   process_id=parameters["id"], process_name=parameters["name"],
                   status="RUNNING", origin="new calculation",
                   started_at=datetime.now(timezone.utc).isoformat(),
@@ -257,10 +260,10 @@ def run_process(data, output, *, progress=None):
 # reading saved runs
 
 def _check_run_status(record):
-    """raise unless the saved record is a complete synthetic run with consistent status."""
+    """raise unless the saved record is a complete synthetic or estimate run with consistent status."""
 
     if (type(record.get("schema_version")) is not int or record["schema_version"] != 1
-            or record.get("kind") != "synthetic"
+            or record.get("kind") not in PROCESS_KINDS
             or record.get("physical_fit_ready") is not False):
         raise ValueError("Unsupported saved run scientific status")
     accepted = record.get("status") == "PASS"
@@ -354,13 +357,21 @@ def compare_runs(folders):
     """side-by-side summary of several checked saved runs."""
 
     rows = []
+    kinds = set()
     for folder in folders:
         record = read_run(folder)
         row = {}
         for key in COMPARE_KEYS:
             row[key] = record.get(key)
         rows.append(row)
-    return dict(kind="synthetic", physical_fit_ready=False, runs=rows,
+        kinds.add(record["kind"])
+
+    # the comparison is only as real as its least real run
+    if "synthetic" in kinds:
+        kind = "synthetic"
+    else:
+        kind = "estimate"
+    return dict(kind=kind, physical_fit_ready=False, runs=rows,
                 interpretation="Saved single-recipe comparisons; no optimization or uncertainty claim")
 
 
@@ -410,7 +421,11 @@ def _display(value):
 def write_report(record, path):
     """write a short markdown report of one run's decisions and outputs."""
 
-    lines = [f"# {record['process_name']}", "", "Synthetic inputs; physical fitting remains blocked.", "",
+    if record["kind"] == "estimate":
+        basis = "Estimated inputs from published values and labelled assumptions; not fitted or validated."
+    else:
+        basis = "Synthetic inputs; physical fitting remains blocked."
+    lines = [f"# {record['process_name']}", "", basis, "",
              f"Numerical acceptance: {record['status']}",
              f"Recipe constraints and wall screen: {record['recipe_feasibility']}", "",
              "These are separate decisions. A numerical PASS does not validate a physical process.", ""]

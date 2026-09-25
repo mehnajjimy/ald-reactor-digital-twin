@@ -12,12 +12,12 @@ are statement-level explanations so the source stays short and readable.
 | 22–26 | Add the base, plan and required output options shared by the historical `run` and `case` commands. |
 | 29–32 | Create the parser and require a named command. |
 | 34–38 | Register GUI startup, run collection, port and optional browser suppression. |
-| 40–43 | Register example listing and input inspection; inspection accepts an ID or path. |
-| 45–50 | Register a single simulation, require an output folder, and add the same numeric duration override for each of the four fixed segments. |
+| 40–43 | Register process listing and input inspection; inspection accepts an ID or path. |
+| 45–50 | Register a single simulation of any valid process, require an output folder, and add the same numeric duration override for each of the four fixed segments. |
 | 52–54 | Register saved comparison with at least one run folder. |
 | 56–66 | Retain the historical `run`/`case` commands with shared configuration paths. Give a study its resume flag; give a case explicit pulse, purge and scenario arguments. |
 | 68–74 | Register historical report generation and read-only status; return the parser. |
-| 77–81 | Read packaged process records and print their IDs, names and synthetic labels. |
+| 77–81 | Read packaged process records and print their IDs, names and kinds, synthetic or estimate. |
 | 84–91 | Load and inspect inputs, print strict JSON, and return whether inputs are runnable. No integration occurs. |
 | 94–96 | Stream actual stage messages to stderr with immediate flushing, so stdout stays JSON. |
 | 99–105 | Load a simulation input and reject missing/non-object recipe data before overrides. |

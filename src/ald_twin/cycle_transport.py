@@ -9,24 +9,26 @@ from .units import R, _nonnegative, _positive
 
 # the two precursor species, in state order: a is the metal precursor, b is water
 SPECIES = ("a", "b")
+# synthetic cases test the numerics, estimate cases use published estimates
+CASE_KINDS = ("synthetic", "estimate")
 
 
 # ---- diffusivity input
 
 def diffusivity(property_data, temperature, pressure):
-    """evaluate the explicitly synthetic D(T,p) input [m²/s].
+    """evaluate a labelled synthetic or estimated D(T,p) input [m²/s].
 
-    a missing physical property cannot fall back to a test value. a future
-    accepted physical relation belongs here, with its own range and source checks.
+    a missing property cannot fall back to a test value. a measured or fitted
+    relation would belong here, with its own range and source checks.
     """
-    # only a labelled synthetic property is accepted for now
-    if property_data.get("kind") != "synthetic" or not property_data.get("source"):
-        raise ValueError("Physical diffusivity is not accepted; supply a labelled synthetic property")
+    # only a labelled synthetic or estimated property with a source is accepted
+    if property_data.get("kind") not in CASE_KINDS or not property_data.get("source"):
+        raise ValueError("Unlabelled diffusivity is not accepted; supply a synthetic or estimate property")
     value = _positive(property_data.get("value"), "reference diffusivity [m²/s]")
     reference_pressure = _positive(property_data.get("pressure"), "reference pressure [Pa]")
     reference_temperature = _positive(property_data.get("temperature"), "reference temperature [K]")
     if temperature != reference_temperature:
-        raise ValueError("This synthetic property defines one temperature only")
+        raise ValueError("This property defines one temperature only")
 
     # gas diffusivity scales as 1/p at fixed temperature
     pressure = np.asarray(pressure, dtype=float)
@@ -75,8 +77,8 @@ class CycleGrid:
         object.__setattr__(self, "conductance", conductance.copy())
 
         _nonnegative(self.molar_flow, "carrier flow [mol/s]")
-        if self.metadata.get("kind") != "synthetic":
-            raise ValueError("The full-cycle implementation currently admits synthetic cases only")
+        if self.metadata.get("kind") not in CASE_KINDS:
+            raise ValueError("The full-cycle implementation admits synthetic or estimate cases only")
 
     @property
     def carrier_moles(self):
@@ -90,8 +92,8 @@ def channel_grid(parameters, cells):
     the square-root pressure profile is integrated over each cell exactly, so
     the total carrier inventory does not depend on the chosen grid.
     """
-    if parameters.get("kind") != "synthetic":
-        raise ValueError("Experimental cycle runs remain blocked")
+    if parameters.get("kind") not in CASE_KINDS:
+        raise ValueError("Fitted or experimental cycle runs remain blocked")
     if isinstance(cells, bool) or not isinstance(cells, (int, np.integer)) or cells < 1:
         raise ValueError("cells must be a positive integer")
 
@@ -131,7 +133,7 @@ def channel_grid(parameters, cells):
     else:
         ratio = None
 
-    metadata = dict(kind="synthetic", parameters=parameters, cells=int(cells),
+    metadata = dict(kind=parameters["kind"], parameters=parameters, cells=int(cells),
                     face_pressure_pa=pressure.tolist(), face_diffusivity_m2_s=diffusion.tolist(),
                     numerical_diffusion_ratio=ratio, physical_fit_ready=False)
     centers = (faces[:-1] + faces[1:]) / 2

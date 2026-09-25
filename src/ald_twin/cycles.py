@@ -207,7 +207,7 @@ class CycleResult:
         np.savez_compressed(str(stem) + ".npz", t=self.integrated.t, z=self.grid.z,
                             scaled_state=self.integrated.y, initial_state=self.initial_state,
                             carrier_moles=self.grid.carrier_moles, reactive_areas=self.grid.reactive_areas)
-        data = dict(kind="synthetic", physical_fit_performed=False, periodic=self.periodic,
+        data = dict(kind=self.grid.metadata["kind"], physical_fit_performed=False, periodic=self.periodic,
                     chemistry=asdict(self.chemistry), grid=self.grid.metadata,
                     fraction_scale=self.fraction_scale, checks=self.checks(),
                     history=self.history, settings=self.settings, segments=self.integrated.segments,
@@ -455,7 +455,7 @@ def periodic_cycle(grid, chemistry, segments, *, fraction_scale, options=SolverO
 
 
 def periodic_gpc(result, density):
-    """equivalent ZnO Å/cycle. this synthetic output is not experimental GPC."""
+    """equivalent ZnO Å/cycle from capacity, turnover and density. not measured GPC."""
     _positive(density, "film density [kg/m³]")
     if not result.periodic:
         raise ValueError("Growth per recurring cycle requires periodic convergence")

@@ -61,13 +61,41 @@ Source papers and books are not redistributed. Software attribution is in
    Original mixture-rule source; the implementation uses supplied composition,
    not a universal inlet composition throughout a reacting chamber.
 
-The water collision model remains an approximation. None of these references
-closes the missing DEZ/N2 transport input. The explicit example files deliberately
-contain synthetic values; a source citation does not make those values physical.
+The water collision model remains an approximation. The synthetic example files
+deliberately contain made-up values; a source citation does not make those
+values physical.
+
+## DEZ and water estimates
+
+These supply the `dez-water-zno` estimate process. None of its values is fitted.
+
+8. Zhuang, et al. (2021). AIChE Journal, 67, e17305.
+   [DOI: 10.1002/aic.17305](https://doi.org/10.1002/aic.17305).
+   Supporting Table S2 (p. 50 of the OSTI accepted manuscript) gives DEZ
+   σ = 5.86 Å and ε/k = 405 K, estimated there from Poling and from Jackson (1992).
+   Used for the DEZ-N2 diffusivity. Its N2 values (3.621 Å, 97.53 K) come from
+   CHEMKIN. This project keeps Poling's N2 values, which changes D by 1.3%.
+
+9. Gonsalves, et al. (2026). arXiv:2609.12460 (preprint).
+   Table 1, p. 10: 6.6 Zn per nm² per cycle, 0.165 nm per cycle and XRR density
+   5.3 g/cm³ at 150 °C. Used for capacity and film density.
+
+10. Cai, et al. (2019). Journal of Materials Science, 54, 5236–5248.
+    [DOI: 10.1007/s10853-018-03260-3](https://doi.org/10.1007/s10853-018-03260-3).
+    QCM mass per cycle of 126 ng/cm² at 150 °C (Fig. 1b) and about 1.5 OH used
+    per DEZ (Eqs. 3–4). Used for the capacity spread and the ethane split.
+
+11. Elam, J. W., Routkevitch, D., and George, S. M. (2003). Journal of the
+    Electrochemical Society, 150, G339.
+    [DOI: 10.1149/1.1569481](https://doi.org/10.1149/1.1569481).
+    Table I: 5.62 g/cm³ at 177 °C. Used for the density spread.
+
+No published sticking probability for DEZ on ZnO, or for water on the ethyl
+surface, was found. Both are assumed in the process file.
 
 ## Numerical software
 
-8. Virtanen, P., et al. (2020). *SciPy 1.0: Fundamental algorithms for scientific
+12. Virtanen, P., et al. (2020). *SciPy 1.0: Fundamental algorithms for scientific
    computing in Python*. Nature Methods, 17, 261–272.
    [DOI: 10.1038/s41592-019-0686-2](https://doi.org/10.1038/s41592-019-0686-2).
    SciPy supplies the time integrators and optimization routines. See

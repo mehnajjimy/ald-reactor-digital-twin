@@ -8,10 +8,10 @@ and compares a simple well-mixed model with one that resolves the channel.
 
 Desktop tested only on Apple Silicon macOS. This build is not Apple-notarized.
 
-**21 Python tests · [CI verified](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D + spatial transport · Mac desktop + CLI**
+**22 Python tests · [CI verified](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D + spatial transport · Mac desktop + CLI**
 
-**The examples are synthetic. DEZ is still a placeholder, and the model has not
-yet been validated against experiments.**
+**Two examples are synthetic. A third, ZnO from DEZ and water, uses published
+estimates and labelled assumptions. None has been validated against experiments.**
 
 ![A and B delivery, surface conversion and conditional mass response](docs/media/ald-cycle.png)
 
@@ -64,13 +64,25 @@ packaging is not verified. [Installation](docs/installation.md) and the
 
 ## DEZ and what comes next
 
-DEZ transport is the main unfinished piece. Separate molecular calculations are
-checking whether we can estimate how fast DEZ diffuses through nitrogen. The Mac
-attempt hit its two-hour limit before the stability check finished. A PC handoff
-is ready, but there is no accepted interaction energy or diffusivity here yet.
+`dez-water-zno` runs at 150 °C with estimated values. DEZ diffusion in nitrogen
+comes from published Lennard-Jones estimates (0.0073 m²/s at 200 Pa). The site
+density and film density come from a 2026 preprint. The DEZ and water sticking
+probabilities are assumed, because no published value was found. Every value and
+its source is in [the input reference](docs/input-reference.md#the-dez-and-water-estimates).
 
-Next is to resolve that input, finish the physical model checks, then compare
-with published ZnO growth data using separate fitting and test conditions.
+```sh
+OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 .venv/bin/ald-twin simulate dez-water-zno --output runs/dez
+```
+
+This takes about 13 minutes, because the real diffusivity needs a 20480-cell grid.
+It passes its numerical checks and gives about 1.68 Å per cycle, close to the
+1.65 Å reported at 150 °C. It fails the wall screen: in this 2 mm channel, DEZ
+takes too long to mix across the gap, so the 1D model is outside its intended
+range. The channel is the made-up one, not the GemStar.
+
+Next is the GemStar geometry and flow, a measured or fitted sticking probability,
+and temperature dependence so the model can run at 85 °C against the lab's QCM
+data. Molecular calculations of DEZ-N2 interaction are continuing separately.
 TMA/H₂O remains the reference chemistry; ZnO results won't validate TMA kinetics.
 
 I'd also like to make custom precursor inputs easier, add documented reactor
