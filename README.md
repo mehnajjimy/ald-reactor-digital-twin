@@ -1,17 +1,23 @@
 # ALD reactor digital twin
 
-How much precursor reaches the end of an ALD reactor? How long does it take to
-clear after a pulse? This project follows the gas and surface through each cycle
-and compares a simple well-mixed model with one that resolves the channel.
+In atomic layer deposition you pulse one precursor into a reactor, purge it out,
+pulse the second one, and purge again. Each cycle adds a very thin slice of film.
+The hard part is knowing whether the gas actually reached the far end of the
+reactor before you switched, and whether the purge really cleared it. This
+project simulates that. It follows the gas and the surface through every cycle
+and compares a simple well-mixed model with one that tracks the whole channel.
 
-**[Download for Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip)** · **[Install guide](docs/install.md)**
+[Download for Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip) · [Install guide](docs/install.md)
 
-Desktop tested only on Apple Silicon macOS. This build is not Apple-notarized.
+The app has only been tested on Apple Silicon Macs. It isn't notarized by
+Apple, so macOS will block it the first time. The install guide shows how to
+open it anyway.
 
-**22 Python tests · [CI verified](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D + spatial transport · Mac desktop + CLI**
+22 Python tests · [CI](https://github.com/mehnajjimy/ald-reactor-digital-twin/actions/workflows/tests.yml) · 0D and spatial models · Mac app and CLI
 
-**Two examples are synthetic. A third, ZnO from DEZ and water, uses published
-estimates and labelled assumptions. None has been validated against experiments.**
+Two of the examples use made-up numbers to test the math. The third, ZnO from
+DEZ and water, uses published estimates plus a couple of assumptions. None of
+them has been checked against real experiments yet.
 
 ![A and B delivery, surface conversion and conditional mass response](docs/media/ald-cycle.png)
 
@@ -21,23 +27,24 @@ estimates and labelled assumptions. None has been validated against experiments.
 
 ![ALD Reactor desktop app displaying a saved synthetic result](docs/media/desktop-app.png)
 
-These plots come from a saved simulation. The mass trace is a model estimate,
-not QCM data. [How the figures were made](docs/readme-figures.md).
+These plots come from one saved simulation. The mass trace is what the model
+predicts, not real QCM data. [How the figures were made](docs/readme-figures.md).
 
 ## What it shows
 
-In this example, the 0D model predicts 97.8% A completion. The spatial model finds
-91.1% at the channel outlet. That difference matters when a recipe must work
-across the whole surface.
+In this example the well-mixed model says 97.8% of the surface finishes the first
+half-reaction. The channel model says only 91.1% does at the outlet. If you only
+ran the simple model, you would think the recipe was fine when the far end of the
+reactor was actually coming up short.
 
-A larger synthetic study checked 63 recipe/scenario pairs. Every calculation
-passed its numerical checks, but no recipe worked across every scenario.
-Nine earlier high-Peclet cases and one capacity-profile point remain unverified.
-Getting the math right and finding a working recipe are separate questions.
+I also ran a bigger study of 63 recipe and scenario pairs. Every calculation
+passed its numerical checks, but no single recipe worked in every scenario. Nine
+older high-Péclet cases and one capacity point are still unverified. So the math
+being right doesn't mean a working recipe exists.
 
 ## Run from source
 
-Use Python 3.12. On macOS or Linux:
+You need Python 3.12. On macOS or Linux:
 
 ```sh
 python3.12 -m venv .venv
@@ -46,7 +53,7 @@ python3.12 -m venv .venv
 .venv/bin/ald-twin gui
 ```
 
-Or inspect and calculate an example from the command line:
+Or run an example from the command line:
 
 ```sh
 .venv/bin/ald-twin inspect synthetic-ab
@@ -54,51 +61,65 @@ OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 .venv/bin/ald-twin simulate synt
 .venv/bin/ald-twin compare runs/first-ab
 ```
 
-The app, CLI and Python API use the same solver. Runs keep their inputs, results
-and source hashes so you can check where a result came from. The fictional A/B
-example reports surface turnover; it has no thickness conversion.
+The app, the CLI and the Python API all use the same solver. Every run saves its
+inputs, results and a hash of the code that made them, so you can always tell
+where a number came from. The fictional A/B example only reports surface
+turnover, since there's no real film to convert it into.
 
-The standalone Mac app has been tested locally on Apple Silicon. Windows
-packaging is not verified. [Installation](docs/installation.md) and the
+I've only tested the Mac app on my own machine, and Windows builds aren't
+verified. [Installation](docs/installation.md) and the
 [desktop guide](docs/desktop-guide.md) cover setup and builds.
 
-## DEZ and what comes next
+## The DEZ example
 
-`dez-water-zno` runs at 150 °C with estimated values. DEZ diffusion in nitrogen
-comes from published Lennard-Jones estimates (0.0073 m²/s at 200 Pa). The site
-density and film density come from a 2026 preprint. The DEZ and water sticking
-probabilities are assumed, because no published value was found. Every value and
-its source is in [the input reference](docs/input-reference.md#the-dez-and-water-estimates).
+For a long time DEZ (diethylzinc) was just a placeholder with numbers picked to
+make the math convenient. `dez-water-zno` swaps those for published estimates:
+
+- DEZ diffuses through nitrogen at about 0.0073 m²/s at 150 °C and 200 Pa. That
+  comes from Lennard-Jones values published by Zhuang et al. (2021).
+- The surface holds about 6.6 zinc atoms per nm² per cycle, and the film density
+  is 5.3 g/cm³. Both come from a 2026 preprint.
+- How likely DEZ and water are to react when they hit the surface is a guess.
+  I couldn't find a published number for either one, so the file says "assumed".
+
+Every value lists its source and how uncertain it is. The full table is in
+[the input reference](docs/input-reference.md#the-dez-and-water-estimates).
 
 ```sh
 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 .venv/bin/ald-twin simulate dez-water-zno --output runs/dez
 ```
 
-This takes about 13 minutes, because the real diffusivity needs a 20480-cell grid.
-It passes its numerical checks and gives about 1.68 Å per cycle, close to the
-1.65 Å reported at 150 °C. It fails the wall screen: in this 2 mm channel, DEZ
-takes too long to mix across the gap, so the 1D model is outside its intended
-range. The channel is the made-up one, not the GemStar.
+Be warned, this one takes about 13 minutes. Real DEZ diffuses around 200 times
+slower than the old placeholder, so the solver needs a 20480-cell grid before
+the purge timing settles down. The DEZ example is in the source code but not in
+the 1.0.0 app download yet.
 
-Next is the GemStar geometry and flow, a measured or fitted sticking probability,
-and temperature dependence so the model can run at 85 °C against the lab's QCM
-data. Molecular calculations of DEZ-N2 interaction are continuing separately.
-TMA/H₂O remains the reference chemistry; ZnO results won't validate TMA kinetics.
+It predicts about 1.68 Å of ZnO per cycle, which is close to the 1.65 Å reported
+at 150 °C. More interesting is that it fails the model's own wall check. In this
+2 mm channel, DEZ takes too long to spread across the gap, so treating the gap as
+well mixed isn't really valid anymore. The model still gives a number, but it
+flags the recipe as outside the range it trusts instead of quietly passing it,
+which is the behaviour I wanted.
 
-I'd also like to make custom precursor inputs easier, add documented reactor
-specifications, and bring in experimental data, including QCM. Other films,
-including silicon-containing systems, need their own chemistry and transport
-checks first. For now, the app is for offline simulation and comparison.
+## What's next
+
+- A faster DEZ demo, so the app shows a result in under a minute
+- Temperature dependence, so it can run below 150 °C
+- Easier custom precursor inputs and documented reactor dimensions
+
+Other films, including silicon-based ones, would each need their own chemistry
+and transport checks first. For now the app is for offline simulation and
+comparison.
 
 ## Guides and sources
 
-- [Inputs](docs/input-reference.md): units, assumptions and acceptance criteria.
-- [Examples](docs/worked-examples.md): changing recipes and comparing saved runs.
-- [Code guide](docs/code-guide.md): calculation path and line-by-line explanations.
-- [Adding a process](docs/adding-a-process.md): supported changes and their limits.
-- [Releases](docs/release-guide.md): builds and the manual update check.
+- [Inputs](docs/input-reference.md): units, assumptions and what counts as a pass
+- [Examples](docs/worked-examples.md): changing recipes and comparing saved runs
+- [Code guide](docs/code-guide.md): how a calculation runs, line by line
+- [Adding a process](docs/adding-a-process.md): what you can change and what you can't
+- [Releases](docs/release-guide.md): builds and the update check
 
-Original code and documentation use the [MIT license](LICENSE).
-[References](docs/references.md) explain the scientific sources;
+The code and docs are under the [MIT license](LICENSE).
+[References](docs/references.md) lists the scientific sources, and
 [third-party notices](THIRD_PARTY_NOTICES.md) cover dependencies and assets.
-Use [CITATION.cff](CITATION.cff) to cite the software.
+Use [CITATION.cff](CITATION.cff) if you want to cite it.
