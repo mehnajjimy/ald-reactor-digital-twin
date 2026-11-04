@@ -7,6 +7,13 @@ reactor before you switched, and whether the purge really cleared it. This
 project simulates that. It follows the gas and the surface through every cycle
 and compares a simple well-mixed model with one that tracks the whole channel.
 
+![Matched 0D and spatial predictions of completion and turnover](docs/media/model-comparison.png)
+
+In this synthetic example the well-mixed model says 97.8% of the surface finishes
+the first half-reaction. The channel model says only 91.1% does at the outlet. If
+you only ran the simple model, you would think the recipe was fine when the far
+end of the reactor was actually coming up short.
+
 [Download for Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip) · [Install guide](docs/install.md)
 
 The app has only been tested on Apple Silicon Macs. It isn't notarized by
@@ -21,8 +28,6 @@ them has been checked against real experiments yet.
 
 ![A and B delivery, surface conversion and conditional mass response](docs/media/ald-cycle.png)
 
-![Matched 0D and spatial predictions of completion and turnover](docs/media/model-comparison.png)
-
 ![Precursor transport and surface conversion along the channel over one cycle](docs/media/transport-heatmap.png)
 
 ![ALD Reactor desktop app displaying a saved synthetic result](docs/media/desktop-app.png)
@@ -32,15 +37,11 @@ predicts, not real QCM data. [How the figures were made](docs/readme-figures.md)
 
 ## What it shows
 
-In this example the well-mixed model says 97.8% of the surface finishes the first
-half-reaction. The channel model says only 91.1% does at the outlet. If you only
-ran the simple model, you would think the recipe was fine when the far end of the
-reactor was actually coming up short.
-
-I also ran a bigger study of 63 recipe and scenario pairs. Every calculation
-passed its numerical checks, but no single recipe worked in every scenario. Nine
-older high-Péclet cases and one capacity point are still unverified. So the math
-being right doesn't mean a working recipe exists.
+Beyond the example at the top, I also ran a bigger study of 63 recipe and
+scenario pairs. Every calculation passed its numerical checks, but no single
+recipe worked in every scenario. Nine older high-Péclet cases and one capacity
+point are still unverified. So the math being right doesn't mean a working
+recipe exists.
 
 ## Run from source
 
@@ -110,6 +111,15 @@ which is the behaviour I wanted.
 Other films, including silicon-based ones, would each need their own chemistry
 and transport checks first. For now the app is for offline simulation and
 comparison.
+
+## Limits
+
+- None of the examples has been checked against real experiments. Two use
+  made-up numbers, and the DEZ example still assumes both reaction probabilities.
+- The 97.8% against 91.1% gap at the top comes from synthetic inputs. It's a
+  model result that I haven't measured on a real reactor.
+- The Mac app has only been tested on Apple Silicon, and Windows builds aren't
+  verified.
 
 ## Guides and sources
 
