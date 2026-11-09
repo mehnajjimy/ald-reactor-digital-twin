@@ -65,7 +65,7 @@ Sources: src/ald_twin/, docs/worked-examples.md, docs/input-reference.md
 > Two of the examples use made-up numbers to test the math. The third, ZnO from DEZ and water, uses published estimates plus a couple of assumptions. None of them has been checked against real experiments yet.
 
 > [!NOTE]
-> <sub>completion: share of the surface that reacts in a half-reaction · turnover: how many surface events happen per cycle · outlet: the far end of the channel · QCM: quartz crystal microbalance, a way to weigh a film as it grows · Péclet number: how much faster flow carries gas than diffusion spreads it · DEZ: diethylzinc · ZnO: zinc oxide · Å: angstrom, a ten-billionth of a metre</sub>
+> <sub>completion: share of the surface that reacts in a half-reaction · turnover: completed surface cycles per site, each cycle · outlet: the far end of the channel · QCM: quartz crystal microbalance, a way to weigh a film as it grows · Péclet number: how much faster flow carries gas than diffusion spreads it · DEZ: diethylzinc · ZnO: zinc oxide · Å: angstrom, a ten-billionth of a meter</sub>
 
 ### Model comparison
 
@@ -73,7 +73,7 @@ The well-mixed model is too optimistic. In the synthetic example it says 97.8% o
 
 ![Precursor transport and surface conversion along the channel over one cycle](docs/media/transport-heatmap.png)
 
-The heatmap shows precursor transport and surface conversion along the channel over one cycle. The 97.8% against 91.1% gap comes from synthetic inputs. It's a model result that I haven't measured on a real reactor.
+The heatmap shows precursor transport and surface conversion along the channel over one cycle.
 
 [How the figures were made](docs/readme-figures.md)
 
@@ -158,10 +158,10 @@ The code and docs are under the [MIT license](LICENSE).
 - 0D model: treats the reactor as one well-mixed volume
 - Spatial model: tracks gas and surface along the whole channel
 - Completion: the share of the surface that reacts in a half-reaction
-- Turnover: how many surface events happen per cycle
+- Turnover: completed surface cycles per site, each cycle
 - Péclet number: how much faster flow carries gas than diffusion spreads it
 - DEZ: diethylzinc, the zinc precursor
 - ZnO: zinc oxide, the film
 - QCM (quartz crystal microbalance): a way to weigh a film as it grows
-- Å (angstrom): a ten-billionth of a metre
+- Å (angstrom): a ten-billionth of a meter
 - CLI: command line interface

@@ -3,7 +3,7 @@
 The `dez-water-zno` example swaps made-up placeholder numbers for published estimates of DEZ (diethylzinc) and water. It predicts about 1.68 Å of ZnO per cycle, close to the 1.65 Å reported at 150 °C, but it fails the model's own wall check. Back to the [README](../README.md).
 
 > [!NOTE]
-> <sub>DEZ: diethylzinc, the zinc precursor · ZnO: zinc oxide, the film · Å: angstrom, a ten-billionth of a metre · diffusivity: how fast a gas spreads · wall check: test of whether gas mixes across the channel gap fast enough to treat the gap as well mixed</sub>
+> <sub>DEZ: diethylzinc, the zinc precursor · ZnO: zinc oxide, the film · Å: angstrom, a ten-billionth of a meter · diffusivity: how fast a gas spreads · wall check: test of whether gas mixes across the channel gap fast enough to treat the gap as well mixed</sub>
 
 ## What changed
 
@@ -30,7 +30,7 @@ It predicts about 1.68 Å of ZnO per cycle, which is close to the 1.65 Å report
 
 The assumed reaction probabilities set how long a pulse takes to fill the surface. So any conclusion about pulse times is a guess until those probabilities are measured or fitted.
 
-More interesting is that it fails the model's own wall check. In this 2 mm channel, DEZ takes too long to spread across the gap, so treating the gap as well mixed isn't really valid anymore. The model still gives a number, but it flags the recipe as outside the range it trusts instead of quietly passing it, which is the behaviour I wanted.
+More interesting is that it fails the model's own wall check. In this 2 mm channel, DEZ takes too long to spread across the gap, so treating the gap as well mixed isn't really valid anymore. The model still gives a number, but it flags the recipe as outside the range it trusts instead of quietly passing it, which is the behavior I wanted.
 
 ## What it doesn't show
 
