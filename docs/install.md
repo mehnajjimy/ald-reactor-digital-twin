@@ -1,6 +1,6 @@
 # Install ALD Reactor
 
-**[Download 1.0.0 for Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip)** · [All releases](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases)
+**[Download 1.0.0 for Apple Silicon Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip)** · [All releases](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases)
 
 The desktop app includes Python and the solver. No terminal setup is needed.
 
@@ -26,9 +26,10 @@ The release also includes a SHA-256 checksum file for checking the download.
 
 ## First run
 
-Choose a process, review its inputs and select **Run**. The examples are synthetic;
-DEZ transport values remain placeholders. Numerical acceptance does not establish
-experimental validity or guarantee a feasible recipe.
+Choose a process, review its inputs and select **Run**. The bundled examples are synthetic.
+The 1.0.0 app uses placeholder DEZ transport values. The newer ZnO example uses
+published transport inputs and is available in the [source project](../README.md#dez-example).
+Numerical acceptance does not establish experimental validity or guarantee a feasible recipe.
 
 The app saves runs and settings under
 `~/Library/Application Support/ALD Reactor/` by default. **File → Open runs folder…**
