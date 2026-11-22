@@ -24,9 +24,9 @@ This project follows the gas and the surface through every cycle. If you only ra
 
 ## Install
 
-The Mac app is a zip you download and open.
+The desktop app is packaged for Apple Silicon Macs.
 
-[Download for Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip) · [Install guide](docs/install.md)
+[Download for Apple Silicon Mac](https://github.com/mehnajjimy/ald-reactor-digital-twin/releases/download/v1.0.0/ALD-Reactor-1.0.0-macOS-arm64.zip) · [Install guide](docs/install.md)
 
 The app has only been tested on Apple Silicon Macs. It isn't notarized by Apple, so macOS will block it the first time. The install guide shows how to open it anyway.
 
