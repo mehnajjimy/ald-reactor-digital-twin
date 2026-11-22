@@ -2,14 +2,14 @@
 
 <p align="center"><a href="#overview">Overview</a> · <a href="#install">Install</a> · <a href="#usage">Usage</a> · <a href="#results">Results</a> · <a href="#limits">Limits</a> · <a href="#next-steps">Next steps</a> · <a href="#guides-and-sources">Guides and sources</a> · <a href="#license">License</a> · <a href="#terms">Terms</a></p>
 
-I wanted to know whether the gas in an atomic layer deposition reactor really reaches the far end before the recipe switches precursors, and whether the purge really clears it. This project simulates that for a synthetic example and compares a simple well-mixed model with one that tracks the whole channel. It runs as a Mac app and from the command line.
+I built a well-mixed reactor model and a one-dimensional finite-volume transport solver for atomic layer deposition (ALD). The models track precursor delivery, purge, and surface reactions across repeated cycles. I use matched synthetic recipes to see when the well-mixed assumption hides outlet underdosing. The solver is available through a Mac app, command-line interface, and Python API.
 
 ## Key results
 
 - In the synthetic example, the well-mixed model says 97.8% of the surface finishes the first half-reaction. The channel model says only 91.1% does at the outlet.
 - In a larger study of 63 recipe and scenario pairs, every calculation passed its numerical checks, but no single recipe worked in every scenario.
-- The ZnO example from DEZ and water predicts about 1.68 Å of film per cycle, close to the 1.65 Å reported at 150 °C. It also fails the model's own wall check.
-- 22 Python tests cover the solver, which the app, the command line and the Python API all share.
+- The literature-based ZnO inputs give a full-coverage estimate of 1.68 Å/cycle, close to the reported 1.65 Å/cycle at 150 °C. A transverse diffusion check flags the 2 mm channel as outside the model's assumptions.
+- The 22 Python tests check numerical and workflow behavior, including hand-calculated face fluxes, closed-form diffusion and purge solutions, and mass conservation through a cycle. Seven JavaScript tests cover desktop workspace state and saved-result handling.
 
 ![Matched 0D and spatial predictions of completion and turnover](docs/media/model-comparison.png)
 
@@ -102,7 +102,7 @@ Sources: docs/model-limits.md, docs/process-study-plan.md
 
 ### DEZ example
 
-DEZ (diethylzinc) used to be a placeholder with numbers picked to make the math convenient. `dez-water-zno` swaps those for published estimates, and every value lists its source and how uncertain it is. It predicts about 1.68 Å of ZnO per cycle, close to the 1.65 Å reported at 150 °C.
+The `dez-water-zno` case replaces placeholder transport inputs with sourced estimates. The documented surface capacity and film density give 1.68 Å/cycle at full coverage, close to the 1.65 Å/cycle reported at 150 °C. The diffusion check still flags the channel, and the sticking probabilities remain assumed.
 
 > [!WARNING]
 > How likely DEZ and water are to react when they hit the surface is a guess. I couldn't find a published number for either one, so the file says "assumed".
