@@ -1,6 +1,6 @@
 # DEZ and water example
 
-The `dez-water-zno` example swaps made-up placeholder numbers for published estimates of DEZ (diethylzinc) and water. It predicts about 1.68 Å of ZnO per cycle, close to the 1.65 Å reported at 150 °C, but it fails the model's own wall check. Back to the [README](../README.md).
+The `dez-water-zno` example uses sourced estimates for DEZ (diethylzinc) and water. Its full-coverage ZnO estimate is about 1.68 Å/cycle, close to the 1.65 Å/cycle reported at 150 °C. The transverse diffusion check flags the 2 mm channel as outside the model's assumptions. Back to the [README](../README.md).
 
 > [!NOTE]
 > <sub>DEZ: diethylzinc, the zinc precursor · ZnO: zinc oxide, the film · Å: angstrom, a ten-billionth of a meter · diffusivity: how fast a gas spreads · wall check: test of whether gas mixes across the channel gap fast enough to treat the gap as well mixed</sub>
@@ -26,7 +26,7 @@ Be warned, this one takes about 13 minutes. Real DEZ diffuses around 200 times s
 
 ## What came out
 
-It predicts about 1.68 Å of ZnO per cycle, which is close to the 1.65 Å reported at 150 °C. That figure is what a fully filled surface gives, using the 5.3 g/cm³ film density and the 6.6 zinc atoms per nm² per cycle above.
+At full coverage, the film density of 5.3 g/cm³ and a capacity of 6.6 zinc atoms per nm² give about 1.68 Å of ZnO per cycle. The comparison value reported at 150 °C is 1.65 Å/cycle.
 
 The assumed reaction probabilities set how long a pulse takes to fill the surface. So any conclusion about pulse times is a guess until those probabilities are measured or fitted.
 
