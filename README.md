@@ -2,25 +2,24 @@
 
 <p align="center"><a href="#overview">Overview</a> · <a href="#install">Install</a> · <a href="#usage">Usage</a> · <a href="#results">Results</a> · <a href="#limits">Limits</a> · <a href="#next-steps">Next steps</a> · <a href="#guides-and-sources">Guides and sources</a> · <a href="#license">License</a> · <a href="#terms">Terms</a></p>
 
-I built a well-mixed reactor model and a one-dimensional finite-volume transport solver for atomic layer deposition (ALD). The models track precursor delivery, purge, and surface reactions across repeated cycles. I use matched synthetic recipes to see when the well-mixed assumption hides outlet underdosing. The solver is available through a Mac app, command-line interface, and Python API.
+Given the same simulated gas pulses, one reactor model predicted that 97.8% of surface sites would finish the first reaction. A second model followed the gas down the channel and predicted 91.1% at the outlet. The first model assigns the same gas concentration everywhere. It has no way to show which end received less precursor.
 
 ## Key results
 
-- In the synthetic example, the well-mixed model says 97.8% of the surface finishes the first half-reaction. The channel model says only 91.1% does at the outlet.
-- In a larger study of 63 recipe and scenario pairs, every calculation passed its numerical checks, but no single recipe worked in every scenario.
-- The literature-based ZnO inputs give a full-coverage estimate of 1.68 Å/cycle, close to the reported 1.65 Å/cycle at 150 °C. A transverse diffusion check flags the 2 mm channel as outside the model's assumptions.
-- The 22 Python tests check numerical and workflow behavior, including hand-calculated face fluxes, closed-form diffusion and purge solutions, and mass conservation through a cycle. Seven JavaScript tests cover desktop workspace state and saved-result handling.
+- **Recipe study.** I tested 63 synthetic combinations of pulse timings and reactor conditions. Every simulation passed the numerical checks. No recipe delivered enough precursor and cleared enough residual gas across every scenario.
+- **Zinc oxide example.** Published surface and film properties give an estimated 1.68 Å per cycle at full coverage. The reported value at 150 °C is 1.65 Å. The model’s diffusion check flags the 2 mm channel used in this example.
+- **Software checks.** The 22 Python tests include hand-calculated fluxes, analytical diffusion and purge solutions, and cycle mass conservation. Seven JavaScript tests cover desktop state and saved results.
 
 ![Matched 0D and spatial predictions of completion and turnover](docs/media/model-comparison.png)
 
 ## Overview
 
-In atomic layer deposition you pulse one precursor into a reactor, purge it out, pulse the second one, and purge again. Each cycle adds a very thin slice of film. The hard part is knowing whether the gas actually reached the far end of the reactor before you switched, and whether the purge really cleared it.
+In atomic layer deposition (ALD), two gases react with a surface in turn. A purge between pulses clears leftover gas. The surface can keep what it picked up from the first pulse while the chamber fills with the second gas.
 
-This project follows the gas and the surface through every cycle. If you only ran the simple model, you would think the recipe was fine when the far end of the reactor was actually coming up short.
+I built the two models in Python so I could change how they represent gas delivery while keeping the chemistry and pulse timings fixed. One model mixes the chamber instantly. The other divides the channel into cells and accounts for gas moving between them.
 
 > [!NOTE]
-> <sub>atomic layer deposition (ALD): building a film one thin layer per cycle · precursor: gas that carries the film's atoms · purge: flushing gas out of the reactor · half-reaction: one precursor reacting with the surface · 0D model: treats the reactor as one well-mixed volume · spatial model: tracks gas along the channel</sub>
+> <sub>atomic layer deposition (ALD): growing a film through repeated gas exposures · precursor: gas that carries the film's atoms · purge: flushing gas out of the reactor · half-reaction: one precursor reacting with the surface · 0D model: treats the reactor as one well-mixed volume · spatial model: tracks gas along the channel</sub>
 
 ## Install
 
@@ -69,11 +68,11 @@ Sources: src/ald_twin/, docs/worked-examples.md, docs/input-reference.md
 
 ### Model comparison
 
-The well-mixed model is too optimistic. In the synthetic example it says 97.8% of the surface finishes the first half-reaction, while the channel model says only 91.1% does at the outlet.
+At the end of the first pulse, the channel calculation can report the fraction of sites that reacted at each position. Comparing its outlet value with the well-mixed prediction gives a gap of 6.7 percentage points in the saved example.
 
 ![Precursor transport and surface conversion along the channel over one cycle](docs/media/transport-heatmap.png)
 
-The heatmap shows precursor transport and surface conversion along the channel over one cycle.
+Follow one position through the purge. The gas concentration falls while the surface keeps its reacted sites until the next precursor arrives.
 
 [How the figures were made](docs/readme-figures.md)
 
@@ -81,7 +80,7 @@ Sources: docs/media/model-comparison.png, docs/media/provenance.json, docs/readm
 
 ### Cycle behavior
 
-One cycle shows A and B delivery, how the surface converts, and a conditional mass response. These plots come from one saved simulation. The mass trace is what the model predicts, not real QCM data.
+The saved cycle below puts gas delivery, site conversion and the calculated mass change on the same time axis. The mass trace uses assumed chemistry. Comparison with a quartz crystal microbalance would require experimental data.
 
 ![A and B delivery, surface conversion and conditional mass response](docs/media/ald-cycle.png)
 
@@ -91,10 +90,10 @@ Sources: docs/media/ald-cycle.png, docs/media/synthetic-cycle.npz, docs/media/pr
 
 ### Recipe study
 
-Beyond the example at the top, I also ran a bigger study of 63 recipe and scenario pairs. Every calculation passed its numerical checks, but no single recipe worked in every scenario. Nine older high-Péclet cases and one capacity point are still unverified.
+The recipe study varied pulse and purge times across 63 recipe and scenario pairs. At the end of the A pulse, at least 90% of the sites in every active cell had to carry A. At the end of the B pulse, at most 10% could still carry A. After each purge, the combined precursor mole fraction throughout the channel had to be at most 1% of the model’s reference mole fraction. Inspecting the numerical checks alone would have missed failures on those criteria.
 
 > [!IMPORTANT]
-> The math being right doesn't mean a working recipe exists.
+> No recipe met all three conditions in every scenario. Nine earlier high-Péclet cases and one surface-capacity point remain numerically unverified.
 
 [Full analysis](docs/recipe-study.md)
 
@@ -102,12 +101,12 @@ Sources: docs/model-limits.md, docs/process-study-plan.md
 
 ### DEZ example
 
-The `dez-water-zno` case replaces placeholder transport inputs with sourced estimates. The documented surface capacity and film density give 1.68 Å/cycle at full coverage, close to the 1.65 Å/cycle reported at 150 °C. The diffusion check still flags the channel, and the sticking probabilities remain assumed.
+The `dez-water-zno` example estimates zinc oxide growth from published values for site capacity and film density. At full coverage those inputs give 1.68 Å per cycle, compared with a published 1.65 Å per cycle at 150 °C.
 
 > [!WARNING]
-> How likely DEZ and water are to react when they hit the surface is a guess. I couldn't find a published number for either one, so the file says "assumed".
+> Both reaction probabilities are assumed. In the example’s 2 mm gap, DEZ diffuses across the channel too slowly for the model’s wall-delivery assumption. The thickness comparison cannot establish that the simulated surface actually reaches full coverage.
 
-The run takes about 13 minutes, and the example is in the source code but not in the 1.0.0 app download yet. It also fails the model's own wall check, because DEZ takes too long to spread across the 2 mm gap. The model still gives a number, but it flags the recipe as outside the range it trusts.
+The example takes about 13 minutes to run from source. The packaged 1.0.0 app predates this example.
 
 ```sh
 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 .venv/bin/ald-twin simulate dez-water-zno --output runs/dez
@@ -151,7 +150,7 @@ The code and docs are under the [MIT license](LICENSE).
 
 ## Terms
 
-- ALD (atomic layer deposition): building a film one thin layer per cycle
+- ALD (atomic layer deposition): growing a film through repeated gas exposures
 - Precursor: a gas that carries the atoms of the film
 - Purge: flushing the gas out of the reactor between pulses
 - Half-reaction: one precursor reacting with the surface
